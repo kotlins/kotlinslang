@@ -1,12 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-          url 'http://oss.sonatype.org/content/repositories/snapshots'
-        }
+        maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "org.flywaydb:flyway-gradle-plugin:${flywayGradleVersion}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinGradleVersion}"
     }
@@ -16,13 +14,17 @@ apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: 'spring-boot'
 
-dependencies {
-  compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinGradleVersion}"
-  testCompile("org.springframework.boot:spring-boot-starter-test")
+repositories {
+    mavenCentral()
+    maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
+}
 
-  testCompile("org.assertj:assertj-core:${assertJVersion}")
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinGradleVersion}"
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.assertj:assertj-core:${assertJVersion}")
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = "2.7"
+    gradleVersion = "2.7"
 }
