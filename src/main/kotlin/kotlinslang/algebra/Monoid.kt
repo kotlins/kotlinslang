@@ -1,5 +1,7 @@
-package kontlinslang.algebra
+package kotlinslang.algebra
 
+import kotlinslang.compose
+import kotlinslang.identity
 
 /**
  * <p>A Monoid is a {@linkplain javaslang.algebra.Semigroup} (types with an associative binary operation) that has an
@@ -75,10 +77,14 @@ interface Monoid<A> : Semigroup<A> {
             }
         }
 
+        /**
+         * The monoid of endomorphisms under composition.
+         *
+         * @param <A> Value type
+         * @return The monoid of endomorphisms of type A.
+         */
         fun <A> endoMonoid(): Monoid<(A) -> A> {
-            val zero: (A) -> A = { a: A -> a }
-            val semigroup: ((A) -> A, (A) -> A) -> A = {a,b -> a()}
-            return of(zero, semigroup)
+            return of(identity(), { a, b -> a.compose(b) })
         }
     }
 }

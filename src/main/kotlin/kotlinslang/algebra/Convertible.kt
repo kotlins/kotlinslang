@@ -1,4 +1,4 @@
-package kontlinslang.algebra
+package kotlinslang.algebra
 /**
  * Conversion methods.
 
