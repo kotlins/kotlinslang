@@ -18,8 +18,8 @@ package kotlinslang.algebra
  * </code></pre>
  *
  * @param <T> Component type of this foldable
- * @author Daniel Dietrich
- * @since 2.0.0
+ * @author Daniel Dietrich, Deny Prasetyo
+ * @since 1.0.0
  */
 interface Foldable<T> {
 

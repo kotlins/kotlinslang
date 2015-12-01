@@ -13,7 +13,7 @@ package kotlinslang.algebra
  *
  * @param <A> A type.
  * @author Daniel Dietrich, Deny Prasetyo
- * @since 1.1.0
+ * @since 1.0.0
  */
 
 interface Semigroup<A> {

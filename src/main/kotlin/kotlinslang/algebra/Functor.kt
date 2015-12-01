@@ -14,7 +14,7 @@ package kotlinslang.algebra
  * @param <T> component type of this functor
  * @author Daniel Dietrich, Deny Prasetyo
  * @see <a href="http://www.haskellforall.com/2012/09/the-functor-design-pattern.html">The functor design pattern</a>
- * @since 1.1.0
+ * @since 1.0.0
  */
 
 interface Functor<T> {

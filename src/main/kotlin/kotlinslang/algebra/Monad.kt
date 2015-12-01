@@ -27,7 +27,7 @@ package kotlinslang.algebra
  *
  * @param <T> component type of this monad
  * @author Daniel Dietrich, Deny Prasetyo
- * @since 1.1.0
+ * @since 1.0.0
  */
 interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
 

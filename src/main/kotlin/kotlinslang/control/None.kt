@@ -5,12 +5,15 @@ import java.util.*
 
 
 /**
- * [TODO: Documentation]
+ * None is a singleton representation of the undefined {@link javaslang.control.Option}. The instance is obtained by
+ * calling {@link #instance()}.
  *
- * @author Deny Prasetyo.
+ * @param <T> The type of the optional value.
+ * @author Daniel Dietrich, Deny Prasetyo
+ * @since 1.0.0
  */
 
-final class None<T> private constructor() : Option<T>, Serializable {
+class None<T> private constructor() : Option<T>, Serializable {
     companion object {
         /**
          * The singleton instance of None.

@@ -63,7 +63,7 @@ import kotlinslang.control.Some
  *
  * @param <T> The type of the wrapped value.
  * @author Daniel Dietrich, Deny Prasetyo
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
