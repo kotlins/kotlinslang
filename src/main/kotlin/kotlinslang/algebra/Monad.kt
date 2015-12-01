@@ -98,7 +98,7 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
      * @return a mapped {@code Monad}
      * @throws NullPointerException if {@code mapper} is null
      */
-    fun <U> flatMap(mapper: (T) -> (Iterable<U>)): Monad<U>
+    fun <U> flatMap(mapper: (T) -> Iterable<U>): Monad<U>
 
     /**
      * Maps this value to a new value with different component type.
@@ -108,5 +108,5 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
      * @return a mapped {@code Monad}
      * @throws NullPointerException if {@code mapper} is null
      */
-    override fun <U> map(mapper: (T) -> (U)): Monad<U>
+    override fun <U> map(mapper: (T) -> U): Monad<U>
 }
