@@ -12,34 +12,13 @@ import java.io.Serializable
  * @author Daniel Dietrich
  * @since 1.0.0
  */
-final class Some<T>(val value: T?) : Serializable {
-    companion object {
-        /**
-         * The singleton instance of None.
-         */
-        private val INSTANCE: Some<*> = Some<Nothing>(null)
+final class Some<T>(val value: T) : Option<T>, Serializable {
 
-        /**
-         * Returns the singleton instance of None as {@code None<T>} in the context of a type {@code <T>}, e.g.
-         * <pre>
-         * <code>final Option&lt;Integer&gt; o = None.instance(); // o is of type None&lt;Integer&gt;</code>
-         * </pre>
-         *
-         * @param <T> The type of the optional value.
-         * @return None
-         */
-        public fun <T> nothing(): Some<*> {
-            @Suppress("UNCHECKED_CAST")
-            val none = INSTANCE as Some<T>;
-            return none;
-        }
-    }
-
-    fun get(): T {
+    override fun get(): T {
         return value!!;
     }
 
-    fun isEmpty(): Boolean {
+    override fun isEmpty(): Boolean {
         return false
     }
 

@@ -10,7 +10,7 @@ import java.util.*
  * @author Deny Prasetyo.
  */
 
-final class None<T> private constructor() : Serializable {
+final class None<T> private constructor() : Option<T>, Serializable {
     companion object {
         /**
          * The singleton instance of None.
@@ -33,11 +33,11 @@ final class None<T> private constructor() : Serializable {
         }
     }
 
-    fun get(): T {
+    override fun get(): T {
         throw NoSuchElementException("No value present")
     }
 
-    fun isEmpty(): Boolean {
+    override fun isEmpty(): Boolean {
         return true
     }
 

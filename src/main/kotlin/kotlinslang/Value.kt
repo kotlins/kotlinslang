@@ -2,6 +2,9 @@ package kotlinslang
 
 import kotlinslang.algebra.Foldable
 import kotlinslang.algebra.Monad
+import kotlinslang.control.None
+import kotlinslang.control.Option
+import kotlinslang.control.Some
 
 
 /**
@@ -65,7 +68,43 @@ import kotlinslang.algebra.Monad
 
 interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
 
+    companion object {
+        /**
+         * Gets the first value of the given Iterable if exists, otherwise throws.
+         *
+         * @param iterable An java.lang.Iterable
+         * @param <T>      Component type
+         * @return An object of type T
+         * @throws java.util.NoSuchElementException if the given iterable is empty
+         */
+        operator fun <T> get(iterable: Iterable<T>): T {
+            if (iterable is Value<T>) {
+                return iterable.get()
+            } else {
+                return iterable.iterator().next()
+            }
+        }
+    }
+
+    /**
+     * Gets the underlying as Option.
+     *
+     * @return Some(value) if a value is present, None otherwise
+     */
+    fun getOption(): Option<T> {
+        return if (isEmpty()) None.instance() else Some(get())
+    }
+
     fun get(): T
+
+
+    override fun toOption(): Option<T> {
+        if (this is Option) {
+            return this
+        } else {
+            return if (isEmpty()) None.instance() else Some(get())
+        }
+    }
 
     /**
      * Checks, this {@code Value} is empty, i.e. if the underlying value is absent.
@@ -122,6 +161,7 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
      * @throws NullPointerException if supplier is null
      * @throws X                    if no value is present
      */
+    @Throws(exceptionClasses = Throwable::class)
     fun <X : Throwable> orElseThrow(supplier: () -> X): T {
         if (isEmpty()) {
             throw supplier()
@@ -219,4 +259,14 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
     override fun filter(predicate: (T) -> Boolean): Value<T>
     override fun <U> flatMap(mapper: (T) -> Iterable<U>): Value<U>
     override fun <U> map(mapper: (T) -> U): Value<U>
+
+    // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
+    override fun <U> foldLeft(zero: U, combine: (U, T) -> U): U {
+        return if (isEmpty()) zero else combine(zero, get())
+    }
+
+    // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
+    override fun <U> foldRight(zero: U, combine: (T, U) -> U): U {
+        return if (isEmpty()) zero else combine(get(), zero)
+    }
 }

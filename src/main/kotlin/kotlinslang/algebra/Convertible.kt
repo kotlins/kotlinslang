@@ -1,4 +1,7 @@
 package kotlinslang.algebra
+
+import kotlinslang.control.Option
+
 /**
  * Conversion methods.
 
@@ -7,5 +10,5 @@ package kotlinslang.algebra
  * @since 1.1.0
  */
 interface Convertible<T> {
-
+    fun toOption(): Option<T>
 }
