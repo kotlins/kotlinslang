@@ -87,6 +87,11 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
     fun <U> flatMap(mapper: (T) -> Iterable<U>): Monad<U>
 
     /**
+     * Performs the given [operation] on element.
+     */
+    fun forEach(operation: (T) -> Unit)
+
+    /**
      * Maps this value to a new value with different component type.
      *
      * @param mapper A mapper
@@ -95,4 +100,6 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
      * @throws NullPointerException if {@code mapper} is null
      */
     override fun <U> map(mapper: (T) -> U): Monad<U>
+
+
 }

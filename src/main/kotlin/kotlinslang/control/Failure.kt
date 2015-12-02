@@ -19,7 +19,7 @@ public final class Failure<T>(private val throwable: Throwable) : Try<T>, Serial
         throw throwable
     }
 
-    override fun getCause():Throwable{
+    override fun getCause(): Throwable {
         return throwable;
     }
 

@@ -52,14 +52,6 @@ interface Try<T> : Value<T> {
      */
     fun isSuccess(): Boolean
 
-    /**
-     * A try is a singleton type.
-     *
-     * @return {@code true}
-     */
-    override fun isSingletonType(): Boolean {
-        return true
-    }
 
     /**
      * Runs the given checked consumer if this is a {@code Success},

@@ -1,8 +1,5 @@
 package kotlinslang.algebra
 
-import kotlinslang.compose
-import kotlinslang.identity
-
 /**
  * <p>A Monoid is a {@linkplain javaslang.algebra.Semigroup} (types with an associative binary operation) that has an
  * identity element {@code zero}.</p>

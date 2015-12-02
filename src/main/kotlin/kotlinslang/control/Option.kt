@@ -40,14 +40,6 @@ interface Option<T> : Value<T> {
         return !isEmpty()
     }
 
-    /**
-     * An option is a singleton type.
-     *
-     * @return {@code true}
-     */
-    override fun isSingletonType(): Boolean {
-        return true
-    }
 
     override fun get(): T
 

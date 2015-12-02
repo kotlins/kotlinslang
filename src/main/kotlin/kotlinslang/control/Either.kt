@@ -105,14 +105,6 @@ interface Either<L, R> {
             return either.isRight()
         }
 
-        /**
-         * A left projection is a singleton type.
-         *
-         * @return {@code true}
-         */
-        override fun isSingletonType(): Boolean {
-            return true
-        }
 
         private fun asLeft(): L {
             return (either as Left<L, R>).get()
@@ -289,9 +281,6 @@ interface Either<L, R> {
             return either.isLeft()
         }
 
-        override fun isSingletonType(): Boolean {
-            return true
-        }
 
         private fun asLeft(): L {
             return (either as Left<L, R>).get()
@@ -455,7 +444,7 @@ interface Either<L, R> {
             return "RightProjection($either)"
         }
 
-        override fun equals(other: Any?): Boolean{
+        override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other?.javaClass != javaClass) return false
 
@@ -466,7 +455,7 @@ interface Either<L, R> {
             return true
         }
 
-        override fun hashCode(): Int{
+        override fun hashCode(): Int {
             return either.hashCode()
         }
     }

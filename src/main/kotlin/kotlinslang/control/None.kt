@@ -1,7 +1,7 @@
 package kotlinslang.control
 
 import java.io.Serializable
-import java.util.*
+import java.util.NoSuchElementException
 
 
 /**

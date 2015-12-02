@@ -133,15 +133,6 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
     }
 
     /**
-     * States, if this value may contain (at most) one element or more than one element, like collections.
-     * <p>
-     * We call a type <em>singleton type</em>, which may contain at most one element.
-     *
-     * @return {@code true}, if this is a singleton type, {@code false} otherwise.
-     */
-    fun isSingletonType(): Boolean
-
-    /**
      * Returns the underlying value if present, otherwise {@code other}.
      *
      * @param other An alternative value.
@@ -264,6 +255,13 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
      */
     fun ifEmpty(trueSupplier: () -> T, falseSupplier: () -> T): T {
         return if (isEmpty()) trueSupplier() else falseSupplier()
+    }
+
+    /**
+     * Performs the given [operation] on element.
+     */
+    override fun forEach(operation: (T) -> Unit) {
+        if (isDefined()) operation(get())
     }
 
     override fun filter(predicate: (T) -> Boolean): Value<T>

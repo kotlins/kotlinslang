@@ -15,11 +15,11 @@ import kotlinslang.identity
  *
  * @param <T> 1st argument type of f
  * @param <R> result type of f
- * @param f a Function
+ * @param function a Function
  * @return a new Function that lifts the given function f in a layer that operates on monads.
  */
-fun <T, R> monadLift(f: (T) -> (R)): (Monad<T>) -> Monad<R> {
-    return { mt: Monad<T> -> mt.map { f(it) } }
+fun <T, R> monadLift(function: (T) -> (R)): (Monad<T>) -> Monad<R> {
+    return { mt: Monad<T> -> mt.map { function(it) } }
 }
 
 /**
