@@ -1,9 +1,12 @@
 language: java
+sudo: false
 jdk:
   - oraclejdk8
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install --only-upgrade -y oracle-java8-installer
   - pip install --user codecov
 after_success:
   - codecov
