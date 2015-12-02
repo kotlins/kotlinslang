@@ -335,14 +335,13 @@ interface Try<T> : Value<T> {
         }
     }
 
-    //TODO: Implement This
-    /* fun toEither(): Either<Throwable, T> {
-         if (isFailure()) {
-             return Left(getCause())
-         } else {
-             return Right(get())
-         }
-     }*/
+    fun toEither(): Either<Throwable, T> {
+        if (isFailure()) {
+            return Left(getCause())
+        } else {
+            return Right(get())
+        }
+    }
 
     override fun equals(other: Any?): Boolean
 

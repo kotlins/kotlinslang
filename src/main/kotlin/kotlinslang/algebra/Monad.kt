@@ -31,20 +31,6 @@ package kotlinslang.algebra
  */
 interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
 
-    companion object {
-        /**
-         * Lifts a {@code Function} to a higher {@code Function} that operates on Monads.
-         *
-         * @param <T> 1st argument type of f
-         * @param <R> result type of f
-         * @param f a Function
-         * @return a new Function that lifts the given function f in a layer that operates on monads.
-         */
-        fun <T, R> lift(f: (T) -> (R)): (Monad<T>) -> Monad<R> {
-            return { mt: Monad<T> -> mt.map { f(it) } }
-        }
-    }
-
     /**
      * Filters this `Monad` by testing a predicate.
      *
