@@ -213,7 +213,7 @@ interface Try<T> : Value<T> {
             @Suppress("UNCHECKED_CAST")
             return this as Failure<U>
         } else {
-            return tryOf<U> { mapper(get()) }
+            return tryOf { mapper(get()) }
         }
     }
 

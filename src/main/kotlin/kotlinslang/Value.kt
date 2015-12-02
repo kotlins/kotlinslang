@@ -6,6 +6,7 @@ import kotlinslang.control.None
 import kotlinslang.control.Option
 import kotlinslang.control.Some
 import kotlinslang.control.Try
+import kotlinslang.control.tryOf
 
 
 /**
@@ -111,7 +112,7 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
         if (this is Try<T>) {
             return this
         } else {
-            return Try.of({ this.get() })
+            return tryOf({ this.get() })
         }
     }
 
