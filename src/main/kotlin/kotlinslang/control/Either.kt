@@ -35,32 +35,6 @@ import java.util.Objects
  */
 interface Either<L, R> {
 
-    companion object {
-        /**
-         * Constructs a {@link Right}
-         *
-         * @param right The value.
-         * @param <L>   Type of left value.
-         * @param <R>   Type of right value.
-         * @return A new {@code Right} instance.
-         */
-        fun <L, R> right(right: R): Either<L, R> {
-            return Right(right)
-        }
-
-        /**
-         * Constructs a {@link Left}
-         *
-         * @param left The value.
-         * @param <L>  Type of left value.
-         * @param <R>  Type of right value.
-         * @return A new {@code Left} instance.
-         */
-        fun <L, R> left(left: L): Either<L, R> {
-            return Left(left)
-        }
-    }
-
     /**
      * Returns a LeftProjection of this Either.
      *
