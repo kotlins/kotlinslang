@@ -9,11 +9,26 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
+apply plugin: "jacoco"
 
 repositories {
     mavenCentral()
     maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
 }
+
+jacoco {
+    toolVersion = "${jacocoToolVersion}"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination "${buildDir}/reports/coverage"
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinGradleVersion}"
