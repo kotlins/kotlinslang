@@ -29,22 +29,17 @@ class AlgebraTest {
     }
 
     @Test
-    fun monoidOfSemigroupShouldCreate() {
-        val monoid = monoidOf(zero = 1, semigroup = object : Semigroup<Int> {
-            override fun combine(a1: Int, a2: Int): Int {
-                return a1 + a2
-            }
-        })
-        assertThat(monoid.zero()).isEqualTo(1)
-        assertThat(monoid.combine(2, 4)).isEqualTo(6)
-    }
-
-    @Test
-    fun monadLiftShouldCreate() {
+    fun monadLiftShouldCreateSome() {
         val liftedMonad = monadLift<Int, Double> { l -> l + 4 * 0.1 }
         val monadOption = optionOf(20)
         val liftedOption = liftedMonad(monadOption)
         liftedOption.forEach { o -> println(o) };
     }
 
+    @Test
+    fun monadLiftShouldCreateNone() {
+        val liftedMonad = monadLift<Int, Double> { l -> l + 4 * 0.1 }
+        val liftedOption = liftedMonad(optionOf(null))
+        liftedOption.forEach { o -> println(o) };
+    }
 }

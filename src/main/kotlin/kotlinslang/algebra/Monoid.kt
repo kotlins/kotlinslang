@@ -19,7 +19,7 @@ package kotlinslang.algebra
  * @since 1.0.0
  */
 
-interface Monoid<A> : Semigroup<A> {
+interface Monoid<A> {
 
     /**
      * The unique neutral element regarding {@linkplain #combine(Object, Object)}.
@@ -27,4 +27,13 @@ interface Monoid<A> : Semigroup<A> {
      * @return The zero element of this Monoid
      */
     fun zero(): A
+
+    /**
+     * Combines two elements of the same type, which is also returned.
+     *
+     * @param a1 An element
+     * @param a2 Another element
+     * @return The combination of a1 and a2
+     */
+    fun combine(a1: A, a2: A): A
 }
