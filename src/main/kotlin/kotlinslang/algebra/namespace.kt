@@ -5,7 +5,7 @@ import kotlinslang.identity
 
 
 /**
- * [TODO: Documentation]
+ * Helper function for algebra
  *
  * @author Deny Prasetyo.
  */
