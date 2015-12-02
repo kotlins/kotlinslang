@@ -9,13 +9,13 @@ import java.io.Serializable
  * {@link Option#of(Object)} is sufficient.
  *
  * @param <T> The type of the optional value.
- * @author Daniel Dietrich
+ * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-class Some<T>(val value: T) : Option<T>, Serializable {
+public final class Some<T>(val value: T) : Option<T>, Serializable {
 
     override fun get(): T {
-        return value!!;
+        return value;
     }
 
     override fun isEmpty(): Boolean {

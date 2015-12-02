@@ -59,17 +59,15 @@ private object EMPTY : AbstractIterator<Nothing>() {
     }
 }
 
-object IteratorUtil {
-    fun <T> empty(): Iterator<T> {
-        return EMPTY
-    }
+fun <T> emptyIterator(): Iterator<T> {
+    return EMPTY
+}
 
-    fun <T> of(element: T): Iterator<T> {
-        return object : AbstractIterator<T>() {
-            override fun computeNext() {
-                setNext(element)
-                done()
-            }
+fun <T> iteratorOf(element: T): Iterator<T> {
+    return object : AbstractIterator<T>() {
+        override fun computeNext() {
+            setNext(element)
+            done()
         }
     }
 }

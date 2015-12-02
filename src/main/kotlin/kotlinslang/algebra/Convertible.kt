@@ -1,6 +1,7 @@
 package kotlinslang.algebra
 
 import kotlinslang.control.Option
+import kotlinslang.control.Try
 
 /**
  * Conversion methods.
@@ -11,4 +12,6 @@ import kotlinslang.control.Option
  */
 interface Convertible<T> {
     fun toOption(): Option<T>
+
+    fun toTry(): Try<T>
 }

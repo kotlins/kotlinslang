@@ -5,7 +5,7 @@ import java.util.*
 
 
 /**
- * None is a singleton representation of the undefined {@link javaslang.control.Option}. The instance is obtained by
+ * None is a singleton representation of the {@Code Nothing} {@link kotlinslang.control.Option}. The instance is obtained by
  * calling {@link #instance()}.
  *
  * @param <T> The type of the optional value.
@@ -13,7 +13,7 @@ import java.util.*
  * @since 1.0.0
  */
 
-class None<T> private constructor() : Option<T>, Serializable {
+public final class None<T> private constructor() : Option<T>, Serializable {
     companion object {
         /**
          * The singleton instance of None.

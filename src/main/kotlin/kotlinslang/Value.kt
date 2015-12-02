@@ -5,6 +5,7 @@ import kotlinslang.algebra.Monad
 import kotlinslang.control.None
 import kotlinslang.control.Option
 import kotlinslang.control.Some
+import kotlinslang.control.Try
 
 
 /**
@@ -103,6 +104,14 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
             return this
         } else {
             return if (isEmpty()) None.instance() else Some(get())
+        }
+    }
+
+    override fun toTry(): Try<T> {
+        if (this is Try<T>) {
+            return this
+        } else {
+            return Try.of({ this.get() })
         }
     }
 

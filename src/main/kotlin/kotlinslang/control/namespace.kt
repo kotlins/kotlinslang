@@ -1,9 +1,134 @@
 package kotlinslang.control
 
+import java.util.Optional
+
+/**
+ * Creates a new {@code Option} from nullable Value.
+ *
+ * @param <T> type of the nullable value
+ * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
+ */
 public fun<T> T?.toOption(): Option<T> {
     return if (this != null) {
         Some(this)
     } else {
         None.instance()
     }
+}
+
+/**
+ * Creates a new {@code Option} of a given value.
+ *
+ * @param value A value, can be {@code null}
+ * @param <T>   type of the value
+ * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
+ */
+fun <T> optionOf(value: T?): Option<T> {
+    return if (value == null) None.instance() else Some(value)
+}
+
+/**
+ * Creates a new {@code Some} of a given value.
+ * <p>
+ * The only difference to {@link optionOf(Object)} is, cannot receive {@code null}.
+ * <pre>
+ * <code>
+ * Option.of(null);   // = None
+ * Option.some(null); // = Compile Error
+ * </code>
+ * </pre>
+ *
+ * @param value A value
+ * @param <T>   type of the value
+ * @return {@code Some(value)}
+ */
+fun <T> some(value: T): Option<T> {
+    return Some(value)
+}
+
+/**
+ * Returns the single instance of {@code None}
+ *
+ * @param <T> component type
+ * @return the single instance of {@code None}
+ */
+fun <T> none(): Option<T> {
+    return None.instance()
+}
+
+/**
+ * Creates {@code Some} of suppliers value if condition is true, or {@code None} in other case
+ *
+ * @param <T>       type of the optional value
+ * @param condition A boolean value
+ * @param supplier  An optional value supplier
+ * @return return {@code Some} of supplier's value if condition is true, or {@code None} in other case
+ */
+fun <T> optionWhen(condition: Boolean, supplier: () -> T): Option<T> {
+    return if (condition) optionOf(supplier()) else none()
+}
+
+/**
+ * Create new Option from a Java Optional
+ *
+ * @param <T>      type of the value
+ * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
+ */
+fun <T> Optional<out T>.toOption(): Option<T> {
+    return if (this.isPresent) optionOf(this.get()) else none()
+}
+
+/**
+ * Creates a Try of a CheckedSupplier.
+ *
+ * @param supplier A checked supplier
+ * @param <T>      Component type
+ * @return {@code Success(supplier.get())} if no exception occurs, otherwise {@code Failure(throwable)} if an
+ * exception occurs calling {@code supplier.get()}.
+ */
+fun <T> tryOf(supplier: () -> T): Try<T> {
+    return try {
+        Success(supplier())
+    } catch (t: Throwable) {
+        Failure(t)
+    }
+}
+
+/**
+ * Creates a Try of a Runnable.
+ *
+ * @param runnable A checked runnable
+ * @return {@code Success(Unit)} if no exception occurs, otherwise {@code Failure(throwable)} if an exception occurs
+ * calling {@code runnable()}.
+ */
+
+fun tryRun(runnable: () -> Unit): Try<Unit> {
+    return try {
+        runnable()
+        Success(Unit)
+    } catch (t: Throwable) {
+        Failure(t)
+    }
+}
+
+/**
+ * Creates a {@link Success} that contains the given {@code value}. Shortcut for {@code new Success<>(value)}.
+ *
+ * @param value A value.
+ * @param <T> Type of the given {@code value}.
+ * @return A new {@code Success}.
+ */
+fun <T> success(value: T): Try<T> {
+    return Success(value)
+}
+
+/**
+ * Creates a {@link Failure} that contains the given {@code exception}. Shortcut for {@code new Failure<>(exception)}.
+ *
+ * @param exception An exception.
+ * @param <T> Component type of the {@code Try}.
+ * @return A new {@code Failure}.
+ */
+fun <T> failure(exception: Throwable): Try<T> {
+    return Failure(exception)
 }

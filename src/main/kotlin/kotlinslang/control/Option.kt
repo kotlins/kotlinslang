@@ -1,9 +1,9 @@
 package kotlinslang.control
 
-import kotlinslang.IteratorUtil
 import kotlinslang.Value
+import kotlinslang.emptyIterator
+import kotlinslang.iteratorOf
 import java.util.Objects
-import java.util.Optional
 
 
 /**
@@ -22,73 +22,6 @@ import java.util.Optional
  * @since 1.0.0
  */
 interface Option<T> : Value<T> {
-    companion object {
-        /**
-         * Creates a new {@code Option} of a given value.
-         *
-         * @param value A value
-         * @param <T>   type of the value
-         * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
-         */
-        fun <T> of(value: T?): Option<T> {
-            return if (value == null) None.instance() else Some(value)
-        }
-
-
-        /**
-         * Creates a new {@code Some} of a given value.
-         * <p>
-         * The only difference to {@link Option#of(Object)} is, when called with argument {@code null}.
-         * <pre>
-         * <code>
-         * Option.of(null);   // = None
-         * Option.some(null); // = Some(null)
-         * </code>
-         * </pre>
-         *
-         * @param value A value
-         * @param <T>   type of the value
-         * @return {@code Some(value)}
-         */
-        fun <T> some(value: T): Option<T> {
-            return Some(value)
-        }
-
-        /**
-         * Returns the single instance of {@code None}
-         *
-         * @param <T> component type
-         * @return the single instance of {@code None}
-         */
-        fun <T> none(): Option<T> {
-            return None.instance()
-        }
-
-        /**
-         * Creates {@code Some} of suppliers value if condition is true, or {@code None} in other case
-         *
-         * @param <T>       type of the optional value
-         * @param condition A boolean value
-         * @param supplier  An optional value supplier, may supply {@code null}
-         * @return return {@code Some} of supplier's value if condition is true, or {@code None} in other case
-         * @throws NullPointerException if the given {@code supplier} is null
-         */
-        fun <T> whenCondition(condition: Boolean, supplier: () -> T): Option<T> {
-            return if (condition) of(supplier()) else none()
-        }
-
-        /**
-         * Wraps a Java Optional to a new Option
-         *
-         * @param optional a given optional to wrap in {@code Option}
-         * @param <T>      type of the value
-         * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
-         */
-        fun <T> ofOptional(optional: Optional<out T>): Option<T> {
-            return if (optional.isPresent) of(optional.get()) else none()
-        }
-    }
-
     /**
      * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
      *
@@ -230,7 +163,7 @@ interface Option<T> : Value<T> {
     }
 
     override fun iterator(): Iterator<T> {
-        return if (isEmpty()) IteratorUtil.empty() else IteratorUtil.of(get())
+        return if (isEmpty()) emptyIterator() else iteratorOf(get())
     }
 
     override fun equals(other: Any?): Boolean
