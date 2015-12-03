@@ -1,6 +1,5 @@
 package kotlinslang
 
-import java.util.NoSuchElementException
 import kotlin.support.AbstractIterator
 
 
@@ -19,7 +18,7 @@ import kotlin.support.AbstractIterator
  *
  * @see #andThen(Function)
  */
-public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
+infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
     return { v: V -> this(before(v)) }
 }
 
@@ -38,10 +37,26 @@ public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
  *
  * @see #compose(Function)
  */
-public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
+infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -> V = andThen(after)
+
+/**
+ * Returns a composed function that first applies this function to
+ * its input, and then applies the {@code after} function to the result.
+ * If evaluation of either function throws an exception, it is relayed to
+ * the caller of the composed function.
+ *
+ * @param <V> the type of output of the {@code after} function, and of the
+ *           composed function
+ * @param after the function to apply after this function is applied
+ * @return a composed function that first applies this function and then
+ * applies the {@code after} function
+ * @throws NullPointerException if after is null
+ *
+ * @see #forwardCompose(Function)
+ */
+infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
     return { t: T -> after(this(t)) }
 }
-
 /**
  * Returns a function that always returns its input argument.
  *
@@ -55,7 +70,7 @@ public fun<T> identity(): (T) -> T {
 
 private object EMPTY : AbstractIterator<Nothing>() {
     override fun computeNext() {
-        throw NoSuchElementException("next() on empty iterator")
+        done()
     }
 }
 
@@ -67,7 +82,6 @@ fun <T> iteratorOf(element: T): Iterator<T> {
     return object : AbstractIterator<T>() {
         override fun computeNext() {
             setNext(element)
-            done()
         }
     }
 }
