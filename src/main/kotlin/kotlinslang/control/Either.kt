@@ -61,6 +61,13 @@ interface Either<L, R> {
     fun isLeft(): Boolean
 
     /**
+     * Returns the value of this.
+     *
+     * @return the value of this
+     */
+    fun get(): Any?
+
+    /**
      * Returns whether this Either is a Right.
      *
      * @return true, if this is a Right, false otherwise

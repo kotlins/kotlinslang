@@ -257,11 +257,30 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
         return if (isEmpty()) trueSupplier() else falseSupplier()
     }
 
-    /**
-     * Performs the given [operation] on element.
-     */
+
     override fun forEach(operation: (T) -> Unit) {
-        if (isDefined()) operation(get())
+        for (item: T in this) {
+            operation(item)
+        }
+    }
+
+    override fun exists(predicate: (T) -> Boolean): Boolean {
+        for (t in this) {
+            if (predicate(t)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun forAll(predicate: (T) -> Boolean): Boolean {
+        for (t in this) {
+            if (!predicate(t)) {
+                return false
+            }
+        }
+
+        return true;
     }
 
     override fun filter(predicate: (T) -> Boolean): Value<T>

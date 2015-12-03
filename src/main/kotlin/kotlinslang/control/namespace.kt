@@ -141,7 +141,7 @@ fun <T> failure(exception: Throwable): Try<T> {
  * @param <R>   Type of right value.
  * @return A new {@code Right} instance.
  */
-fun <L, R> right(right: R): Either<L, R> {
+fun <R> right(right: R): Either<Any?, R> {
     return Right(right)
 }
 
@@ -153,6 +153,6 @@ fun <L, R> right(right: R): Either<L, R> {
  * @param <R>  Type of right value.
  * @return A new {@code Left} instance.
  */
-fun <L, R> left(left: L): Either<L, R> {
+fun <L> left(left: L): Either<L, Any?> {
     return Left(left)
 }

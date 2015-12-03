@@ -92,6 +92,23 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
     fun forEach(operation: (T) -> Unit)
 
     /**
+     * Checks, if an element exists such that the predicate holds.
+     *
+     * @param predicate A Predicate
+     * @return true, if predicate holds for one or more elements, false otherwise
+     */
+    fun exists(predicate: (T) -> Boolean): Boolean
+
+    /**
+     * Checks, if the given predicate holds for all elements.
+     *
+     * @param predicate A Predicate
+     * @return true, if the predicate holds for all elements, false otherwise
+     * @throws NullPointerException if {@code predicate} is null
+     */
+    fun forAll(predicate: (T) -> Boolean): Boolean
+
+    /**
      * Maps this value to a new value with different component type.
      *
      * @param mapper A mapper

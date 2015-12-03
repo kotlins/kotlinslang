@@ -28,7 +28,7 @@ public final class Left<L, R>(val value: L) : Either<L, R>, Serializable {
      *
      * @return the value of this {@code Left}
      */
-    fun get(): L {
+    override fun get(): L {
         return value
     }
 

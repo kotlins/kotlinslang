@@ -48,7 +48,7 @@ class UtilTest {
     }
 
     @Test
-    fun someMushProduceSomeOption() {
+    fun someMustProduceSomeOption() {
         val element = 10
         val some = some(element)
         assertThat(some.isEmpty()).isFalse()
@@ -92,4 +92,143 @@ class UtilTest {
         assertThat(some.isEmpty()).isFalse()
         assertThat(some.get()).isEqualTo(notNull)
     }
+
+
+    @Test
+    fun rightMustProduceCorrectEither() {
+        val value = 42
+        val rightEither = right(value)
+        assertThat(rightEither.right().isDefined()).isTrue()
+        assertThat(rightEither.left().isEmpty()).isTrue()
+        assertThat(rightEither.right().get()).isEqualTo(value)
+        assertFailsWith(
+                exceptionClass = NoSuchElementException::class,
+                block = { rightEither.left().get() }
+        )
+    }
+
+    @Test
+    fun leftMustProduceCorrectEither() {
+        val value = 42
+        val leftEither = left(value)
+        assertThat(leftEither.left().isDefined()).isTrue()
+        assertThat(leftEither.right().isEmpty()).isTrue()
+        assertThat(leftEither.left().get()).isEqualTo(value)
+        assertFailsWith(
+                exceptionClass = NoSuchElementException::class,
+                block = { leftEither.right().get() }
+        )
+    }
+
+    @Test
+    fun successMustProduceCorrectTry() {
+        val value = 42
+        val successTry = success(value)
+        assertThat(successTry.isDefined()).isTrue()
+        assertThat(successTry.isSuccess()).isTrue()
+        assertThat(successTry.isEmpty()).isFalse()
+        assertThat(successTry.isFailure()).isFalse()
+        assertThat(successTry.get()).isEqualTo(value)
+        assertFailsWith(
+                exceptionClass = UnsupportedOperationException::class,
+                block = { successTry.getCause() }
+        )
+    }
+
+    @Test
+    fun failureMustProduceCorrectTry() {
+        val cause = IllegalArgumentException("Failure With Illegal Argument")
+        val failureTry = failure<Int>(cause)
+        assertThat(failureTry.isDefined()).isFalse()
+        assertThat(failureTry.isEmpty()).isTrue()
+        assertThat(failureTry.isSuccess()).isFalse()
+        assertThat(failureTry.isFailure()).isTrue()
+        assertThat(failureTry.getCause()).isEqualTo(cause)
+        assertFailsWith(
+                exceptionClass = IllegalArgumentException::class,
+                block = { failureTry.get() }
+        )
+    }
+
+    @Test
+    fun tryRunMustProduceCorrectTry() {
+        val successTry = tryRun { println("Something not Throw Exception") }
+        assertThat(successTry.isDefined()).isTrue()
+        assertThat(successTry.isSuccess()).isTrue()
+        assertThat(successTry.isEmpty()).isFalse()
+        assertThat(successTry.isFailure()).isFalse()
+        assertThat(successTry.get()).isEqualTo(Unit)
+        assertFailsWith(
+                exceptionClass = UnsupportedOperationException::class,
+                block = { successTry.getCause() }
+        )
+
+        @Suppress("DIVISION_BY_ZERO")
+        val failedTry = tryRun { println("Something Throw Exception ${3 / 0}") }
+        assertThat(failedTry.isDefined()).isFalse()
+        assertThat(failedTry.isSuccess()).isFalse()
+        assertThat(failedTry.isEmpty()).isTrue()
+        assertThat(failedTry.isFailure()).isTrue()
+        assertThat(failedTry.getCause()).isInstanceOf(Throwable::class.java)
+        assertThat(failedTry.getCause()).isExactlyInstanceOf(ArithmeticException::class.java)
+        assertFailsWith(
+                exceptionClass = ArithmeticException::class,
+                block = { failedTry.get() }
+        )
+
+    }
+
+    @Test
+    fun tryOfMustProduceCorrectTry() {
+        val successTry = tryOf { println("Something not Throw Exception") }
+        assertThat(successTry.isDefined()).isTrue()
+        assertThat(successTry.isSuccess()).isTrue()
+        assertThat(successTry.isEmpty()).isFalse()
+        assertThat(successTry.isFailure()).isFalse()
+        assertThat(successTry.get()).isEqualTo(Unit)
+        assertFailsWith(
+                exceptionClass = UnsupportedOperationException::class,
+                block = { successTry.getCause() }
+        )
+
+        @Suppress("DIVISION_BY_ZERO")
+        val failedTry = tryOf { println("Something Throw Exception ${3 / 0}") }
+        assertThat(failedTry.isDefined()).isFalse()
+        assertThat(failedTry.isSuccess()).isFalse()
+        assertThat(failedTry.isEmpty()).isTrue()
+        assertThat(failedTry.isFailure()).isTrue()
+        assertThat(failedTry.getCause()).isInstanceOf(Throwable::class.java)
+        assertThat(failedTry.getCause()).isExactlyInstanceOf(ArithmeticException::class.java)
+        assertFailsWith(
+                exceptionClass = ArithmeticException::class,
+                block = { failedTry.get() }
+        )
+
+        val value = 42
+        val successTryOf = tryOf { value * 1 }
+        assertThat(successTryOf.isDefined()).isTrue()
+        assertThat(successTryOf.isSuccess()).isTrue()
+        assertThat(successTryOf.isEmpty()).isFalse()
+        assertThat(successTryOf.isFailure()).isFalse()
+        assertThat(successTryOf.get()).isEqualTo(value)
+        assertFailsWith(
+                exceptionClass = UnsupportedOperationException::class,
+                block = { successTryOf.getCause() }
+        )
+
+        @Suppress("DIVISION_BY_ZERO")
+        val failedTryOf = tryOf { value * (3 / 0) }
+        assertThat(failedTryOf.isDefined()).isFalse()
+        assertThat(failedTryOf.isSuccess()).isFalse()
+        assertThat(failedTryOf.isEmpty()).isTrue()
+        assertThat(failedTryOf.isFailure()).isTrue()
+        assertThat(failedTryOf.getCause()).isInstanceOf(Throwable::class.java)
+        assertThat(failedTryOf.getCause()).isExactlyInstanceOf(ArithmeticException::class.java)
+        assertFailsWith(
+                exceptionClass = ArithmeticException::class,
+                block = { failedTryOf.get() }
+        )
+
+    }
+
 }

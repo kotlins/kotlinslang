@@ -30,7 +30,7 @@ public final class Right<L, R>(val value: R) : Either<L, R>, Serializable {
      *
      * @return the value of this {@code Right}
      */
-    fun get(): R {
+    override fun get(): R {
         return value
     }
 

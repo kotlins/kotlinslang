@@ -57,6 +57,7 @@ infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -
 infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
     return { t: T -> after(this(t)) }
 }
+
 /**
  * Returns a function that always returns its input argument.
  *
@@ -79,9 +80,9 @@ fun <T> emptyIterator(): Iterator<T> {
 }
 
 fun <T> iteratorOf(element: T): Iterator<T> {
-    return object : AbstractIterator<T>() {
-        override fun computeNext() {
-            setNext(element)
-        }
-    }
+    return listOf(element).iterator()
+}
+
+fun <T> iteratorOf(vararg element: T): Iterator<T> {
+    return listOf(*element).iterator()
 }
