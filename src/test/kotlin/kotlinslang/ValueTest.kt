@@ -31,13 +31,21 @@ class ValueTest {
     @Test
     fun getOptionBehaveCorrectly() {
         val element = 42
-        val option = optionOf(element)
-        assertThat(option.toOption()).isEqualTo(option)
-        assertThat(option.getOption()).isEqualTo(option)
+        val some = optionOf(element)
+        assertThat(some.toOption()).isEqualTo(some)
+        assertThat(some.getOption()).isEqualTo(some)
 
         val success = success(element)
-        assertThat(success.toOption()).isEqualTo(option)
-        assertThat(success.getOption()).isEqualTo(option)
+        assertThat(success.toOption()).isEqualTo(some)
+        assertThat(success.getOption()).isEqualTo(some)
+
+        val none = optionOf(null)
+        assertThat(none.toOption()).isEqualTo(none)
+        assertThat(none.getOption()).isEqualTo(none)
+
+        val failure = failure<Int>(NoSuchElementException("No Element"))
+        assertThat(failure.toOption()).isEqualTo(none)
+        assertThat(failure.getOption()).isEqualTo(none)
     }
 
     @Test
