@@ -33,8 +33,8 @@ class UtilTest {
         assertThat(nonEmptyIter.next()).isEqualTo(element)
         assertThat(nonEmptyIter.hasNext()).isFalse()
 
-        val pair:Pair<Int,Int> = Pair(10,42)
-        val nonEmptyPairIter = iteratorOf(pair.first,pair.second)
+        val pair: Pair<Int, Int> = Pair(10, 42)
+        val nonEmptyPairIter = iteratorOf(pair.first, pair.second)
         assertThat(nonEmptyPairIter.hasNext()).isTrue()
         assertThat(nonEmptyPairIter.next()).isEqualTo(pair.first)
 

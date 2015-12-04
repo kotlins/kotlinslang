@@ -28,22 +28,22 @@ interface Foldable<T> {
      *
      * @param <U>     the type of the folded value
      * @param zero    A zero element to start with.
-     * @param combine A function which combines elements.
+     * @param combiner A function which combines elements.
      * @return a folded value
      * @throws NullPointerException if {@code combine} is null
      */
-    fun <U> foldLeft(zero: U, combine: (U, T) -> U): U
+    fun <U> foldLeft(zero: U, combiner: (U, T) -> U): U
 
     /**
      * Folds this elements from the right, starting with {@code zero} and successively calling {@code combine}.
      *
      * @param <U>     the type of the folded value
      * @param zero    A zero element to start with.
-     * @param combine A function which combines elements.
+     * @param combiner A function which combines elements.
      * @return a folded value
      * @throws NullPointerException if {@code combine} is null
      */
-    fun <U> foldRight(zero: U, combine: (T, U) -> U): U
+    fun <U> foldRight(zero: U, combiner: (T, U) -> U): U
 
     /**
      * Folds this elements from the left, starting with {@code monoid.zero()} and successively calling {@code monoid::combine}.
@@ -53,21 +53,19 @@ interface Foldable<T> {
      * @throws NullPointerException if {@code monoid} is null
      */
     fun fold(monoid: Monoid<out T>): T {
-        @Suppress("UNCHECKED_CAST")
-        val m = monoid as Monoid<T>
-        return foldLeft(m.zero(), { t, t2 -> m.combine(t, t2) })
+        return foldLeft(monoid)
     }
 
     /**
      * Folds this elements from the left, starting with {@code zero} and successively calling {@code combine}.
      *
      * @param zero    A zero element to start with.
-     * @param combine A function which combines elements.
+     * @param combiner A function which combines elements.
      * @return a folded value
      * @throws NullPointerException if {@code combine} is null
      */
-    fun fold(zero: T, combine: (T, T) -> T): T {
-        return foldLeft(zero, combine)
+    fun fold(zero: T, combiner: (T, T) -> T): T {
+        return foldLeft(zero, combiner)
     }
 
     /**
@@ -96,7 +94,39 @@ interface Foldable<T> {
      * @throws NullPointerException if {@code monoid} or {@code mapper} is null
      */
     fun <U> foldMap(monoid: Monoid<U>, mapper: (T) -> U): U {
-        return foldLeft(monoid.zero()) { ys, x -> monoid.combine(ys, mapper(x)) }
+        return foldLeftMap(monoid, mapper)
+    }
+
+    /**
+     * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
+     * <pre><code>
+     *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+     * </code></pre>
+     *
+     * @param monoid A Monoid
+     * @param mapper A mapper
+     * @param <U>    Component type of the given monoid.
+     * @return the folded monoid value.
+     * @throws NullPointerException if {@code monoid} or {@code mapper} is null
+     */
+    fun <U> foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+        return foldLeft(monoid.zero(), { ys, x -> monoid.combine(ys, mapper(x)) })
+    }
+
+    /**
+     * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
+     * <pre><code>
+     *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+     * </code></pre>
+     *
+     * @param monoid A Monoid
+     * @param mapper A mapper
+     * @param <U>    Component type of the given monoid.
+     * @return the folded monoid value.
+     * @throws NullPointerException if {@code monoid} or {@code mapper} is null
+     */
+    fun <U> foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+        return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys),x) })
     }
 
     /**

@@ -288,12 +288,12 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
     override fun <U> map(mapper: (T) -> U): Value<U>
 
     // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U> foldLeft(zero: U, combine: (U, T) -> U): U {
-        return if (isEmpty()) zero else combine(zero, get())
+    override fun <U> foldLeft(zero: U, combiner: (U, T) -> U): U {
+        return if (isEmpty()) zero else combiner(zero, get())
     }
 
     // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U> foldRight(zero: U, combine: (T, U) -> U): U {
-        return if (isEmpty()) zero else combine(get(), zero)
+    override fun <U> foldRight(zero: U, combiner: (T, U) -> U): U {
+        return if (isEmpty()) zero else combiner(get(), zero)
     }
 }
