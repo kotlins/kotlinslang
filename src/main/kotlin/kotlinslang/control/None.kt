@@ -34,6 +34,10 @@ public final class None<T> private constructor() : Option<T>, Serializable {
             val none = INSTANCE as None<T>;
             return none;
         }
+
+        public fun readResolve(): Any? {
+            return INSTANCE.readResolve()
+        }
     }
 
     override fun get(): T {
@@ -62,7 +66,7 @@ public final class None<T> private constructor() : Option<T>, Serializable {
      * @return The singleton instance of None.
      * @see java.io.Serializable
      */
-    private fun readResolve(): Any {
+    private fun readResolve(): Any? {
         return INSTANCE
     }
 }

@@ -3,7 +3,6 @@ package kotlinslang.control
 import kotlinslang.Value
 import kotlinslang.emptyIterator
 import kotlinslang.iteratorOf
-import java.util.Objects
 
 
 /**
@@ -15,7 +14,7 @@ import java.util.Objects
  * <p>
  * Most of the API is taken from {@link java.util.Optional}. A similar type can be found in <a
  * href="http://hackage.haskell.org/package/base-4.6.0.1/docs/Data-Maybe.html">Haskell</a> and <a
- * href="http://www.scala-lang.org/api/current/#scala.Option">Scala</a>.
+ * href="http://www.scala-lang.org/api /current/#scala.Option">Scala</a>.
  *
  * @param <T> The type of the optional value.
  * @author Daniel Dietrich, Deny Prasetyo
@@ -143,7 +142,6 @@ interface Option<T> : Value<T> {
      * @return this {@code Option}
      */
     override fun peek(action: (T) -> Unit): Option<T> {
-        Objects.requireNonNull(action, "action is null")
         if (isDefined()) {
             action(get())
         }
