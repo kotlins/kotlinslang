@@ -21,7 +21,7 @@ package kotlinslang.algebra
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Foldable<T> {
+interface Foldable<T : Any> {
 
     /**
      * Folds this elements from the left, starting with {@code zero} and successively calling {@code combine}.
@@ -32,18 +32,18 @@ interface Foldable<T> {
      * @return a folded value
      * @throws NullPointerException if {@code combine} is null
      */
-    fun <U> foldLeft(zero: U, combiner: (U, T) -> U): U
+    fun <U : Any> foldLeft(zero: U, combiner: (U, T) -> U): U
 
     /**
      * Folds this elements from the right, starting with {@code zero} and successively calling {@code combine}.
      *
-     * @param <U>     the type of the folded value
+     * @param <U : Any>     the type of the folded value
      * @param zero    A zero element to start with.
      * @param combiner A function which combines elements.
      * @return a folded value
      * @throws NullPointerException if {@code combine} is null
      */
-    fun <U> foldRight(zero: U, combiner: (T, U) -> U): U
+    fun <U : Any> foldRight(zero: U, combiner: (T, U) -> U): U
 
     /**
      * Folds this elements from the left, starting with {@code monoid.zero()} and successively calling {@code monoid::combine}.
@@ -87,11 +87,11 @@ interface Foldable<T> {
      *
      * @param monoid A Monoid
      * @param mapper A mapper
-     * @param <U>    Component type of the given monoid.
+     * @param <U : Any>    Component type of the given monoid.
      * @return the folded monoid value.
      * @throws NullPointerException if {@code monoid} or {@code mapper} is null
      */
-    fun <U> foldMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    fun <U : Any> foldMap(monoid: Monoid<U>, mapper: (T) -> U): U {
         return foldLeftMap(monoid, mapper)
     }
 
@@ -103,11 +103,11 @@ interface Foldable<T> {
      *
      * @param monoid A Monoid
      * @param mapper A mapper
-     * @param <U>    Component type of the given monoid.
+     * @param <U : Any>    Component type of the given monoid.
      * @return the folded monoid value.
      * @throws NullPointerException if {@code monoid} or {@code mapper} is null
      */
-    fun <U> foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    fun <U : Any> foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U): U {
         return foldLeft(monoid.zero(), { ys, x -> monoid.combine(ys, mapper(x)) })
     }
 
@@ -119,11 +119,11 @@ interface Foldable<T> {
      *
      * @param monoid A Monoid
      * @param mapper A mapper
-     * @param <U>    Component type of the given monoid.
+     * @param <U : Any>    Component type of the given monoid.
      * @return the folded monoid value.
      * @throws NullPointerException if {@code monoid} or {@code mapper} is null
      */
-    fun <U> foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    fun <U : Any> foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
         return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys), x) })
     }
 

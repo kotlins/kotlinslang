@@ -68,7 +68,7 @@ import kotlinslang.control.tryOf
  * @since 1.0.0
  */
 
-interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
+interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
 
     companion object {
         /**
@@ -79,7 +79,7 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
          * @return An object of type T
          * @throws java.util.NoSuchElementException if the given iterable is empty
          */
-        operator fun <T> get(iterable: Iterable<T>): T {
+        operator fun <T : Any> get(iterable: Iterable<T>): T {
             if (iterable is Value<T>) {
                 return iterable.get()
             } else {
@@ -283,16 +283,16 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
     }
 
     override fun filter(predicate: (T) -> Boolean): Value<T>
-    override fun <U> flatMap(mapper: (T) -> Iterable<U>): Value<U>
-    override fun <U> map(mapper: (T) -> U): Value<U>
+    override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Value<U>
+    override fun <U : Any> map(mapper: (T) -> U): Value<U>
 
     // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U> foldLeft(zero: U, combiner: (U, T) -> U): U {
+    override fun <U : Any> foldLeft(zero: U, combiner: (U, T) -> U): U {
         return if (isEmpty()) zero else combiner(zero, get())
     }
 
     // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U> foldRight(zero: U, combiner: (T, U) -> U): U {
+    override fun <U : Any> foldRight(zero: U, combiner: (T, U) -> U): U {
         return if (isEmpty()) zero else combiner(get(), zero)
     }
 }

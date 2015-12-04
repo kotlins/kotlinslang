@@ -11,7 +11,7 @@ import java.io.Serializable
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-public final class Right<L, R>(val value: R) : Either<L, R>, Serializable {
+public final class Right<L : Any, R : Any>(val value: R) : Either<L, R>, Serializable {
 
     override fun isLeft(): Boolean {
         return false
@@ -21,7 +21,7 @@ public final class Right<L, R>(val value: R) : Either<L, R>, Serializable {
         return true
     }
 
-    override fun <X, Y> bimap(leftMapper: (L) -> X, rightMapper: (R) -> Y): Right<X, Y> {
+    override fun <X : Any, Y : Any> bimap(leftMapper: (L) -> X, rightMapper: (R) -> Y): Right<X, Y> {
         return Right(rightMapper(value))
     }
 
@@ -55,7 +55,7 @@ public final class Right<L, R>(val value: R) : Either<L, R>, Serializable {
     }
 
     override fun hashCode(): Int {
-        return value?.hashCode() ?: 0
+        return value.hashCode()
     }
 
     override fun toString(): String {

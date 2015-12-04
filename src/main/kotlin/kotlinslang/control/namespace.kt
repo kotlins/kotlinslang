@@ -3,12 +3,22 @@ package kotlinslang.control
 import java.util.Optional
 
 /**
+ * Create new Option from a Java Optional
+ *
+ * @param <T>      type of the value
+ * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
+ */
+fun <T : Any> Optional<T?>.toOption(): Option<T> {
+    return if (this.isPresent) optionOf(this.get()) else none()
+}
+
+/**
  * Creates a new {@code Option} from nullable Value.
  *
  * @param <T> type of the nullable value
  * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
  */
-public fun<T> T?.toOption(): Option<T> {
+public fun<T : Any> T?.toOption(): Option<T> {
     return if (this != null) {
         Some(this)
     } else {
@@ -23,7 +33,7 @@ public fun<T> T?.toOption(): Option<T> {
  * @param <T>   type of the value
  * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
  */
-fun <T> optionOf(value: T?): Option<T> {
+fun <T : Any> optionOf(value: T?): Option<T> {
     return if (value == null) None.instance() else Some(value)
 }
 
@@ -42,8 +52,13 @@ fun <T> optionOf(value: T?): Option<T> {
  * @param <T>   type of the value
  * @return {@code Some(value)}
  */
-fun <T> some(value: T): Option<T> {
-    return Some(value)
+fun <T : Any> some(value: T?): Option<T> {
+    return if (value == null) {
+        none()
+    } else {
+        Some(value)
+    }
+
 }
 
 /**
@@ -52,7 +67,7 @@ fun <T> some(value: T): Option<T> {
  * @param <T> component type
  * @return the single instance of {@code None}
  */
-fun <T> none(): Option<T> {
+fun <T : Any> none(): Option<T> {
     return None.instance()
 }
 
@@ -64,18 +79,8 @@ fun <T> none(): Option<T> {
  * @param supplier  An optional value supplier
  * @return return {@code Some} of supplier's value if condition is true, or {@code None} in other case
  */
-fun <T> optionWhen(condition: Boolean, supplier: () -> T): Option<T> {
+fun <T : Any> optionWhen(condition: Boolean, supplier: () -> T): Option<T> {
     return if (condition) optionOf(supplier()) else none()
-}
-
-/**
- * Create new Option from a Java Optional
- *
- * @param <T>      type of the value
- * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
- */
-fun <T> Optional<out T>.toOption(): Option<T> {
-    return if (this.isPresent) optionOf(this.get()) else none()
 }
 
 /**
@@ -86,7 +91,7 @@ fun <T> Optional<out T>.toOption(): Option<T> {
  * @return {@code Success(supplier.get())} if no exception occurs, otherwise {@code Failure(throwable)} if an
  * exception occurs calling {@code supplier.get()}.
  */
-fun <T> tryOf(supplier: () -> T): Try<T> {
+fun <T : Any> tryOf(supplier: () -> T): Try<T> {
     return try {
         Success(supplier())
     } catch (t: Throwable) {
@@ -118,7 +123,7 @@ fun tryRun(runnable: () -> Unit): Try<Unit> {
  * @param <T> Type of the given {@code value}.
  * @return A new {@code Success}.
  */
-fun <T> success(value: T): Try<T> {
+fun <T : Any> success(value: T): Try<T> {
     return Success(value)
 }
 
@@ -129,7 +134,7 @@ fun <T> success(value: T): Try<T> {
  * @param <T> Component type of the {@code Try}.
  * @return A new {@code Failure}.
  */
-fun <T> failure(exception: Throwable): Try<T> {
+fun <T : Any> failure(exception: Throwable): Try<T> {
     return Failure(exception)
 }
 
@@ -141,7 +146,7 @@ fun <T> failure(exception: Throwable): Try<T> {
  * @param <R>   Type of right value.
  * @return A new {@code Right} instance.
  */
-fun <R> right(right: R): Either<Any?, R> {
+fun <R : Any> right(right: R): Either<Any, R> {
     return Right(right)
 }
 
@@ -153,6 +158,6 @@ fun <R> right(right: R): Either<Any?, R> {
  * @param <R>  Type of right value.
  * @return A new {@code Left} instance.
  */
-fun <L> left(left: L): Either<L, Any?> {
+fun <L : Any> left(left: L): Either<L, Any> {
     return Left(left)
 }

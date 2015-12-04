@@ -19,7 +19,7 @@ package kotlinslang.algebra
  * @since 1.0.0
  */
 
-interface Monoid<A> {
+interface Monoid<A : Any> {
 
     /**
      * The unique neutral element regarding {@linkplain #combine(Object, Object)}.

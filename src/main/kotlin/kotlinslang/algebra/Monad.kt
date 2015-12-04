@@ -29,7 +29,7 @@ package kotlinslang.algebra
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
+interface Monad<T : Any> : Functor<T>, Iterable<T>, Convertible<T> {
 
     /**
      * Filters this `Monad` by testing a predicate.
@@ -84,7 +84,7 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
      * @return a mapped {@code Monad}
      * @throws NullPointerException if {@code mapper} is null
      */
-    fun <U> flatMap(mapper: (T) -> Iterable<U>): Monad<U>
+    fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Monad<U>
 
     /**
      * Performs the given [operation] on element.
@@ -116,7 +116,7 @@ interface Monad<T> : Functor<T>, Iterable<T>, Convertible<T> {
      * @return a mapped {@code Monad}
      * @throws NullPointerException if {@code mapper} is null
      */
-    override fun <U> map(mapper: (T) -> U): Monad<U>
+    override fun <U : Any> map(mapper: (T) -> U): Monad<U>
 
 
 }

@@ -22,10 +22,10 @@ class ValueTest {
     fun staticGetBehaveCorrectly() {
         val value = 42
         val option = optionOf(value)
-        assertThat(Value.get(option)).isEqualTo(value)
+        assertThat(Value[option]).isEqualTo(value)
 
         val list = listOf(value)
-        assertThat(Value.get(list)).isEqualTo(value)
+        assertThat(Value[list]).isEqualTo(value)
     }
 
     @Test

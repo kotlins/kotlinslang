@@ -20,7 +20,7 @@ import kotlinslang.iteratorOf
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Option<T> : Value<T> {
+interface Option<T : Any> : Value<T> {
     /**
      * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
      *
@@ -102,7 +102,7 @@ interface Option<T> : Value<T> {
      * @param <U>    Component type of the resulting Option
      * @return a new {@code Option}
      */
-    override fun <U> flatMap(mapper: (T) -> Iterable<U>): Option<U> {
+    override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Option<U> {
         if (isEmpty()) {
             return None.instance()
         } else {
@@ -127,7 +127,7 @@ interface Option<T> : Value<T> {
      * @param <U>    The new value type
      * @return a new {@code Some} containing the mapped value if this Option is defined, otherwise {@code None}, if this is empty.
      */
-    override fun <U> map(mapper: (T) -> U): Option<U> {
+    override fun <U : Any> map(mapper: (T) -> U): Option<U> {
         if (isEmpty()) {
             return None.instance()
         } else {

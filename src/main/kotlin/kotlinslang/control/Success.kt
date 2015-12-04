@@ -12,7 +12,7 @@ import java.io.Serializable
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-public final class Success<T>(val value: T) : Try<T>, Serializable {
+public final class Success<T : Any>(val value: T) : Try<T>, Serializable {
 
     override fun get(): T {
         return value
@@ -46,7 +46,7 @@ public final class Success<T>(val value: T) : Try<T>, Serializable {
     }
 
     override fun hashCode(): Int {
-        return value?.hashCode() ?: 0
+        return value.hashCode()
     }
 
     override fun toString(): String {
