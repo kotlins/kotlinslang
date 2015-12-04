@@ -99,7 +99,6 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
 
     fun get(): T
 
-
     override fun toOption(): Option<T> {
         if (this is Option) {
             return this
@@ -264,7 +263,7 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
         }
     }
 
-    override fun exists(predicate: (T) -> Boolean): Boolean {
+    override fun any(predicate: (T) -> Boolean): Boolean {
         for (t in this) {
             if (predicate(t)) {
                 return true
@@ -273,7 +272,7 @@ interface Value<T> : Iterable<T>, Foldable<T>, Monad<T> {
         return false
     }
 
-    override fun forAll(predicate: (T) -> Boolean): Boolean {
+    override fun all(predicate: (T) -> Boolean): Boolean {
         for (t in this) {
             if (!predicate(t)) {
                 return false

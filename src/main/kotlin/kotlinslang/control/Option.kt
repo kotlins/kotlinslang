@@ -56,7 +56,7 @@ interface Option<T> : Value<T> {
      * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
      */
     override fun orElse(other: T): T {
-        return if (isEmpty()) other else get()
+        return super.orElse(other)
     }
 
     /**
@@ -69,7 +69,7 @@ interface Option<T> : Value<T> {
      * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
      */
     override fun orElseGet(supplier: () -> T): T {
-        return if (isEmpty()) supplier() else get()
+        return super.orElseGet(supplier)
     }
 
     /**
@@ -82,11 +82,7 @@ interface Option<T> : Value<T> {
      */
     @Throws(exceptionClasses = Throwable::class)
     override fun <X : Throwable> orElseThrow(supplier: () -> X): T {
-        if (isEmpty()) {
-            throw supplier()
-        } else {
-            return get()
-        }
+        return super.orElseThrow(supplier)
     }
 
     /**
