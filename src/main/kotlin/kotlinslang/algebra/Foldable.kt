@@ -52,7 +52,7 @@ interface Foldable<T> {
      * @return a folded value
      * @throws NullPointerException if {@code monoid} is null
      */
-    fun fold(monoid: Monoid<out T>): T {
+    fun fold(monoid: Monoid<T>): T {
         return foldLeft(monoid)
     }
 
@@ -75,10 +75,8 @@ interface Foldable<T> {
      * @return a folded value
      * @throws NullPointerException if {@code monoid} is null
      */
-    fun foldLeft(monoid: Monoid<out T>): T {
-        @Suppress("UNCHECKED_CAST")
-        val m = monoid as Monoid<T>
-        return foldLeft(m.zero(), { t, t2 -> m.combine(t, t2) })
+    fun foldLeft(monoid: Monoid<T>): T {
+        return foldLeft(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })
     }
 
     /**
@@ -126,7 +124,7 @@ interface Foldable<T> {
      * @throws NullPointerException if {@code monoid} or {@code mapper} is null
      */
     fun <U> foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
-        return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys),x) })
+        return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys), x) })
     }
 
     /**
@@ -136,10 +134,8 @@ interface Foldable<T> {
      * @return a folded value
      * @throws NullPointerException if {@code monoid} is null
      */
-    fun foldRight(monoid: Monoid<out T>): T {
-        @Suppress("UNCHECKED_CAST")
-        val m = monoid as Monoid<T>
-        return foldRight(m.zero(), { t, t2 -> m.combine(t, t2) })
+    fun foldRight(monoid: Monoid<T>): T {
+        return foldRight(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })
     }
 
 
