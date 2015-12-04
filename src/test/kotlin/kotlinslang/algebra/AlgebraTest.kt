@@ -74,6 +74,10 @@ class AlgebraTest {
         assertThat(foldable.foldRight(zero, combiner)).isEqualTo(expected)
         assertThat(foldable.foldRight(monoid)).isEqualTo(expected)
 
+        val emptyFoldable = optionOf(value)
+        assertThat(emptyFoldable.foldRight(zero, combiner)).isEqualTo(zero)
+        assertThat(emptyFoldable.foldRight(monoid)).isEqualTo(zero)
+
     }
 
     @Test
