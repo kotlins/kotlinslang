@@ -3,6 +3,16 @@ package kotlinslang.control
 import java.util.Optional
 
 /**
+ * Create new Option from a Java Optional
+ *
+ * @param <T>      type of the value
+ * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
+ */
+fun <T : Any> Optional<T?>.toOption(): Option<T> {
+    return if (this.isPresent) optionOf(this.get()) else none()
+}
+
+/**
  * Creates a new {@code Option} from nullable Value.
  *
  * @param <T> type of the nullable value
@@ -71,16 +81,6 @@ fun <T : Any> none(): Option<T> {
  */
 fun <T : Any> optionWhen(condition: Boolean, supplier: () -> T): Option<T> {
     return if (condition) optionOf(supplier()) else none()
-}
-
-/**
- * Create new Option from a Java Optional
- *
- * @param <T>      type of the value
- * @return {@code Some(optional.get())} if value is Java {@code Optional} is present, {@code None} otherwise
- */
-fun <T : Any> Optional<out T>.toOption(): Option<T> {
-    return if (this.isPresent) optionOf(this.get()) else none()
 }
 
 /**
