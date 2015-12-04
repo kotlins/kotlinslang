@@ -13,7 +13,7 @@ import java.util.NoSuchElementException
  * @since 1.0.0
  */
 
-public final class None<T> private constructor() : Option<T>, Serializable {
+public final class None<T : Any> private constructor() : Option<T>, Serializable {
     companion object {
         /**
          * The singleton instance of None.
@@ -29,7 +29,7 @@ public final class None<T> private constructor() : Option<T>, Serializable {
          * @param <T> The type of the optional value.
          * @return None
          */
-        public fun <T> instance(): None<T> {
+        public fun <T : Any> instance(): None<T> {
             @Suppress("UNCHECKED_CAST")
             val none = INSTANCE as None<T>;
             return none;

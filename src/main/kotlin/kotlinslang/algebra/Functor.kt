@@ -17,7 +17,7 @@ package kotlinslang.algebra
  * @since 1.0.0
  */
 
-interface Functor<T> {
+interface Functor<T : Any> {
     /**
      * Applies a function f to the components of this Functor.
      *
@@ -27,5 +27,5 @@ interface Functor<T> {
      * @throws NullPointerException if {@code f} is null
      */
 
-    fun <U> map(mapper: (T) -> (U)): Functor<U>
+    fun <U : Any> map(mapper: (T) -> (U)): Functor<U>
 }

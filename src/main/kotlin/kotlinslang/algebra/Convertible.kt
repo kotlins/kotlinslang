@@ -10,7 +10,7 @@ import kotlinslang.control.Try
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Convertible<T> {
+interface Convertible<T : Any> {
     fun toOption(): Option<T>
 
     fun toTry(): Try<T>

@@ -13,7 +13,7 @@ import java.util.NoSuchElementException
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Try<T> : Value<T> {
+interface Try<T : Any> : Value<T> {
 
     /**
      * Gets the result of this Try if this is a Success or throws if this is a Failure.
@@ -162,7 +162,7 @@ interface Try<T> : Value<T> {
      * @param <U>    The new component type
      * @return a new Try
      */
-    override fun <U> flatMap(mapper: (T) -> Iterable<U>): Try<U> {
+    override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Try<U> {
         if (isFailure()) {
             @Suppress("UNCHECKED_CAST")
             return this as Failure<U>
@@ -200,7 +200,7 @@ interface Try<T> : Value<T> {
      * @param mapper A checked function
      * @return a new {@code Try}
      */
-    override fun <U> map(mapper: (T) -> U): Try<U> {
+    override fun <U : Any> map(mapper: (T) -> U): Try<U> {
         if (isFailure()) {
             @Suppress("UNCHECKED_CAST")
             return this as Failure<U>

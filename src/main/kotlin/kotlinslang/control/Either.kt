@@ -33,7 +33,7 @@ import java.util.Objects
  * @author Daniel Dietrich
  * @since 1.0.0
  */
-interface Either<L, R> {
+interface Either<L : Any, R : Any> {
 
     /**
      * Returns a LeftProjection of this Either.
@@ -83,7 +83,7 @@ interface Either<L, R> {
      * @param <Y>         The new right type of the resulting Either
      * @return A new either instance
      */
-    fun <X, Y> bimap(leftMapper: (L) -> X, rightMapper: (R) -> Y): Either<X, Y>
+    fun <X : Any, Y : Any> bimap(leftMapper: (L) -> X, rightMapper: (R) -> Y): Either<X, Y>
 
     /**
      * Converts a {@code Left} to a {@code Right} vice versa by wrapping the value in a new type.
@@ -106,7 +106,7 @@ interface Either<L, R> {
      * @param <R> The type of the Right value of an Either.
      * @since 1.0.0
      */
-    class LeftProjection<L, R> constructor(val either: Either<L, R>) : Value<L> {
+    class LeftProjection<L : Any, R : Any> constructor(val either: Either<L, R>) : Value<L> {
 
         override fun isEmpty(): Boolean {
             return either.isRight()
@@ -216,7 +216,7 @@ interface Either<L, R> {
          * @param <U>    The new type of a Left value
          * @return A new LeftProjection
          */
-        override fun <U> flatMap(mapper: (L) -> Iterable<U>): LeftProjection<U, R> {
+        override fun <U : Any> flatMap(mapper: (L) -> Iterable<U>): LeftProjection<U, R> {
             if (either.isLeft()) {
                 return Left<U, R>(Value[mapper(asLeft())]).left()
             } else {
@@ -232,7 +232,7 @@ interface Either<L, R> {
          * @param <U>    The new type of a Left value
          * @return A new LeftProjection
          */
-        override fun <U> map(mapper: (L) -> U): LeftProjection<U, R> {
+        override fun <U : Any> map(mapper: (L) -> U): LeftProjection<U, R> {
             if (either.isLeft())
                 return Left<U, R>(mapper(asLeft())).left()
             else {
@@ -282,7 +282,7 @@ interface Either<L, R> {
         }
     }
 
-    class RightProjection<L, R> constructor(val either: Either<L, R>) : Value<R> {
+    class RightProjection<L : Any, R : Any> constructor(val either: Either<L, R>) : Value<R> {
 
         override fun isEmpty(): Boolean {
             return either.isLeft()
@@ -399,7 +399,7 @@ interface Either<L, R> {
          * @param <U>    The new type of a Right value
          * @return A new RightProjection
          */
-        override fun <U> flatMap(mapper: (R) -> Iterable<U>): RightProjection<L, U> {
+        override fun <U : Any> flatMap(mapper: (R) -> Iterable<U>): RightProjection<L, U> {
             Objects.requireNonNull(mapper, "mapper is null")
             if (either.isRight()) {
                 return Right<L, U>(Value[mapper(asRight())]).right()
@@ -416,7 +416,7 @@ interface Either<L, R> {
          * @param <U>    The new type of a Right value
          * @return A new RightProjection
          */
-        override fun <U> map(mapper: (R) -> U): RightProjection<L, U> {
+        override fun <U : Any> map(mapper: (R) -> U): RightProjection<L, U> {
             if (either.isRight())
                 return Right<L, U>(mapper(asRight())).right()
             else {

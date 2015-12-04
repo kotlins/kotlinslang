@@ -18,7 +18,7 @@ import kotlinslang.identity
  * @param function a Function
  * @return a new Function that lifts the given function f in a layer that operates on monads.
  */
-fun <T, R> monadLift(function: (T) -> (R)): (Monad<T>) -> Monad<R> {
+fun <T : Any, R : Any> monadLift(function: (T) -> (R)): (Monad<T>) -> Monad<R> {
     return { mt: Monad<T> -> mt.map { function(it) } }
 }
 
@@ -32,7 +32,7 @@ fun <T, R> monadLift(function: (T) -> (R)): (Monad<T>) -> Monad<R> {
  * @return a new Monoid on type A
  * @throws NullPointerException if {@code semigroup} is null
  */
-fun <A> monoidOf(zero: A, combiner: (A, A) -> A): Monoid<A> {
+fun <A : Any> monoidOf(zero: A, combiner: (A, A) -> A): Monoid<A> {
     return object : Monoid<A> {
         override fun zero(): A {
             return zero
@@ -50,6 +50,6 @@ fun <A> monoidOf(zero: A, combiner: (A, A) -> A): Monoid<A> {
  * @param <A> Value type
  * @return The monoid of endomorphisms of type A.
  */
-fun <A> endoMonoid(): Monoid<(A) -> A> {
+fun <A : Any> endoMonoid(): Monoid<(A) -> A> {
     return monoidOf(identity(), { a, b -> a.compose(b) })
 }
