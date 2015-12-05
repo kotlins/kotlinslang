@@ -285,10 +285,7 @@ interface Try<T : Any> : Value<T> {
      * @return this Try
      */
     override fun peek(action: (T) -> Unit): Try<T> {
-        if (isSuccess()) {
-            action(get())
-        }
-        return this
+        return onSuccess(action)
     }
 
     /**
