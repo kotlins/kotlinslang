@@ -28,8 +28,6 @@ public final class Some<T : Any>(val value: T) : Option<T>, Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
         if (other != null && other is Some<*> && value == other.value) return true
         return false
     }
