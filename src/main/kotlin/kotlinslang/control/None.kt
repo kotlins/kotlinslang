@@ -18,7 +18,7 @@ public final class None<T : Any> private constructor() : Option<T>, Serializable
         /**
          * The singleton instance of None.
          */
-        private val INSTANCE: None<*> = None<Nothing>()
+        private val INSTANCE: None<Nothing> = None()
 
         /**
          * Returns the singleton instance of None as {@code None<T>} in the context of a type {@code <T>}, e.g.
@@ -30,9 +30,8 @@ public final class None<T : Any> private constructor() : Option<T>, Serializable
          * @return None
          */
         public fun <T : Any> instance(): None<T> {
-            @Suppress("UNCHECKED_CAST")
-            val none = INSTANCE as None<T>;
-            return none;
+            @Suppress("CAST_NEVER_SUCCEEDS")
+            return INSTANCE as None<T>;
         }
 
         public fun readResolve(): Any? {
