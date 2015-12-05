@@ -44,17 +44,19 @@ bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
     configurations = ['archives']
+    publish = true
     pkg {
         repo = 'org.kotlinslang'
         name = 'kotlinslang'
+        desc = "A functional library for Kotlin that provides functional control structures."
         userOrg = user
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/jasoet-gdp/kotlinslang.git'
+        issueTrackerUrl = 'https://github.com/jasoet-gdp/kotlinslang/issues'
         labels = ['kotlin', 'functional', 'control']
         publicDownloadNumbers = true
         version {
-            name = "${project.name}"
-            desc = "A functional library for Kotlin that provides functional control structures."
+            name = "${project.version}"
             vcsTag = "${project.version}"
         }
     }
