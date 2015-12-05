@@ -52,13 +52,8 @@ fun <T : Any> optionOf(value: T?): Option<T> {
  * @param <T>   type of the value
  * @return {@code Some(value)}
  */
-fun <T : Any> some(value: T?): Option<T> {
-    return if (value == null) {
-        none()
-    } else {
-        Some(value)
-    }
-
+fun <T : Any> some(value: T): Option<T> {
+    return Some(value)
 }
 
 /**
