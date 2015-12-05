@@ -30,11 +30,8 @@ public final class Some<T : Any>(val value: T) : Option<T>, Serializable {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
 
-        other as Some<*>
-
-        if (value != other.value) return false
-
-        return true
+        if (other != null && other is Some<*> && value == other.value) return true
+        return false
     }
 
     override fun hashCode(): Int {

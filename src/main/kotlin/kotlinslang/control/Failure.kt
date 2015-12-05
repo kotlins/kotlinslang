@@ -37,13 +37,8 @@ public final class Failure<T : Any>(private val throwable: Throwable) : Try<T>, 
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as Failure<*>
-
-        if (throwable != other.throwable) return false
-
-        return true
+        if (other != null && other is Failure<*> && throwable == other.throwable) return true
+        return false
     }
 
     override fun hashCode(): Int {

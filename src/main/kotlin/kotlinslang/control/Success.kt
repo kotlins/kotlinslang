@@ -36,14 +36,10 @@ public final class Success<T : Any>(val value: T) : Try<T>, Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as Success<*>
-
-        if (value != other.value) return false
-
-        return true
+        if (other != null && other is Success<*> && value == other.value) return true
+        return false
     }
+
 
     override fun hashCode(): Int {
         return value.hashCode()

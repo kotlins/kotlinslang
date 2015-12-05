@@ -47,13 +47,8 @@ public final class Left<L : Any, R : Any>(val value: L) : Either<L, R>, Serializ
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as Left<*, *>
-
-        if (value != other.value) return false
-
-        return true
+        if (other != null && other is Left<*, *> && value == other.value) return true
+        return false
     }
 
     override fun hashCode(): Int {

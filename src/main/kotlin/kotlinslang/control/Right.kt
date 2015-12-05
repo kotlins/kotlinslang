@@ -45,13 +45,8 @@ public final class Right<L : Any, R : Any>(val value: R) : Either<L, R>, Seriali
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as Right<*, *>
-
-        if (value != other.value) return false
-
-        return true
+        if (other != null && other is Right<*,*> && value == other.value) return true
+        return false
     }
 
     override fun hashCode(): Int {
