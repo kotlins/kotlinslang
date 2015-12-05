@@ -73,6 +73,7 @@ class OptionTest {
 
         assertEquals(some, someOption)
         assertThat(some.equals(42)).isFalse()
+        assertThat(some.equals(null)).isFalse()
         assertThat(some.equals(some(142))).isFalse()
         assertThat(some.equals(some(42.0))).isFalse()
         assertEquals(some.hashCode(), someOption.hashCode())

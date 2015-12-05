@@ -55,6 +55,7 @@ class TryTest {
         assertThat(success.equals(successTry)).isTrue()
         assertNotEquals(success, failure(NullPointerException("NPE")))
         assertThat(success.equals(10)).isFalse()
+        assertThat(success.equals(success(142))).isFalse()
         assertThat(success.equals(null)).isFalse()
         assertThat(success.equals(success(element)))
 
