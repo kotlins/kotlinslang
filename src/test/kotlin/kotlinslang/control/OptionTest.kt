@@ -44,6 +44,7 @@ class OptionTest {
         )
 
         assertEquals(none.filter { t -> true }, none)
+        assertEquals(none.filter { t -> false }, none)
         none.peek { t -> assertTrue(false, "Must Not reached") }
 
         assertEquals(none.iterator(), emptyIterator())
@@ -78,6 +79,7 @@ class OptionTest {
         assertEquals(some.orElseThrow { -> NullPointerException("NPE") }, element)
 
         assertEquals(some.filter { t -> true }, some)
+        assertEquals(some.filter { t -> false }, none())
 
         var reached = false
         some.peek { t -> reached = true }
