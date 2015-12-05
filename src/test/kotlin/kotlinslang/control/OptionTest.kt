@@ -20,9 +20,12 @@ class OptionTest {
     @Test
     fun noneBehaveCorrectly() {
         val none = none<Int>()
+        val nothing = none<Nothing>()
         val noneOption = optionOf<Int>(null)
 
         assertThat(none.equals(noneOption)).isTrue()
+        assertThat(nothing.equals(nothing)).isTrue()
+        assertThat(none.equals(42)).isFalse()
         assertThat(none.isEmpty()).isTrue()
         assertThat(none.isDefined()).isFalse()
         assertFailsWith(
@@ -69,6 +72,9 @@ class OptionTest {
         assertEquals(some.get(), element)
 
         assertEquals(some, someOption)
+        assertThat(some.equals(42)).isFalse()
+        assertThat(some.equals(some(142))).isFalse()
+        assertThat(some.equals(some(42.0))).isFalse()
         assertEquals(some.hashCode(), someOption.hashCode())
         assertEquals(some.toString(), someOption.toString())
 
