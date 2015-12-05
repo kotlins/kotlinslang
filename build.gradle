@@ -57,6 +57,7 @@ bintray {
         publicDownloadNumbers = true
         version {
             name = "${project.version}"
+            desc = "Kotlinslang version ${project.version}, 50% Test coverage remaining."
             vcsTag = "${project.version}"
         }
     }
