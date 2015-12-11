@@ -1,7 +1,9 @@
 package kotlinslang.control
 
-import kotlinslang.emptyIterator
-import kotlinslang.iteratorOf
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
+import kotlinslang.orElse
+import kotlinslang.orElseGet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.NoSuchElementException
@@ -36,7 +38,7 @@ class OptionTest {
         assertEquals(none, noneOption)
         assertEquals(none.hashCode(), noneOption.hashCode())
         assertEquals(none.toString(), noneOption.toString())
-        assertEquals(None.readResolve(), None.readResolve())
+        assertEquals(None, None)
 
         val otherElement = 142
         assertEquals(none.orElse(otherElement), otherElement)

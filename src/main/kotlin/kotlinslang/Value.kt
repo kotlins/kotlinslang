@@ -1,12 +1,6 @@
 package kotlinslang
 
-import kotlinslang.algebra.Foldable
 import kotlinslang.algebra.Monad
-import kotlinslang.control.None
-import kotlinslang.control.Option
-import kotlinslang.control.Some
-import kotlinslang.control.Try
-import kotlinslang.control.tryOf
 
 
 /**
@@ -68,7 +62,7 @@ import kotlinslang.control.tryOf
  * @since 1.0.0
  */
 
-interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
+interface Value<out T : Any> : Iterable<T>, Monad<T> {
 
     companion object {
         /**
@@ -88,32 +82,7 @@ interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
         }
     }
 
-    /**
-     * Gets the underlying as Option.
-     *
-     * @return Some(value) if a value is present, None otherwise
-     */
-    fun getOption(): Option<T> {
-        return if (isEmpty()) None.instance() else Some(get())
-    }
-
     fun get(): T
-
-    override fun toOption(): Option<T> {
-        if (this is Option) {
-            return this
-        } else {
-            return if (isEmpty()) None.instance() else Some(get())
-        }
-    }
-
-    override fun toTry(): Try<T> {
-        if (this is Try<T>) {
-            return this
-        } else {
-            return tryOf({ this.get() })
-        }
-    }
 
     /**
      * Checks, this {@code Value} is empty, i.e. if the underlying value is absent.
@@ -131,26 +100,10 @@ interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
         return !isEmpty()
     }
 
-    /**
-     * Returns the underlying value if present, otherwise {@code other}.
-     *
-     * @param other An alternative value.
-     * @return A value of type {@code T}
-     */
-    fun orElse(other: T): T {
-        return if (isEmpty()) other else get()
+    fun orNull(): T? {
+        return if (isEmpty()) null else get()
     }
 
-    /**
-     * Returns the underlying value if present, otherwise {@code other}.
-     *
-     * @param supplier An alternative value supplier.
-     * @return A value of type {@code T}
-     * @throws NullPointerException if supplier is null
-     */
-    fun orElseGet(supplier: () -> T): T {
-        return if (isEmpty()) supplier() else get()
-    }
 
     /**
      * Returns the underlying value if present, otherwise throws {@code supplier.get()}.
@@ -208,54 +161,6 @@ interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
      */
     override fun toString(): String
 
-    /**
-     * A fluent if-expression for this value. If this is defined (i.e. not empty) trueVal is returned,
-     * otherwise falseVal is returned.
-     *
-     * @param trueVal  The result, if this is defined.
-     * @param falseVal The result, if this is not defined.
-     * @return trueVal if this.isDefined(), otherwise falseVal.
-     */
-    fun ifDefined(trueVal: T, falseVal: T): T {
-        return if (isDefined()) trueVal else falseVal
-    }
-
-    /**
-     * A fluent if-expression for this value. If this is defined (i.e. not empty) trueSupplier.get() is returned,
-     * otherwise falseSupplier.get() is returned.
-     *
-     * @param trueSupplier  The result, if this is defined.
-     * @param falseSupplier The result, if this is not defined.
-     * @return trueSupplier.get() if this.isDefined(), otherwise falseSupplier.get().
-     */
-    fun ifDefined(trueSupplier: () -> T, falseSupplier: () -> T): T {
-        return if (isDefined()) trueSupplier() else falseSupplier()
-    }
-
-    /**
-     * A fluent if-expression for this value. If this is empty (i.e. not defined) trueVal is returned,
-     * otherwise falseVal is returned.
-     *
-     * @param trueVal  The result, if this is empty.
-     * @param falseVal The result, if this is not empty.
-     * @return trueVal if this.isEmpty(), otherwise falseVal.
-     */
-    fun ifEmpty(trueVal: T, falseVal: T): T {
-        return if (isEmpty()) trueVal else falseVal
-    }
-
-    /**
-     * A fluent if-expression for this value. If this is empty (i.e. not defined) trueSupplier.get() is returned,
-     * otherwise falseSupplier.get() is returned.
-     *
-     * @param trueSupplier  The result, if this is defined.
-     * @param falseSupplier The result, if this is not defined.
-     * @return trueSupplier.get() if this.isEmpty(), otherwise falseSupplier.get().
-     */
-    fun ifEmpty(trueSupplier: () -> T, falseSupplier: () -> T): T {
-        return if (isEmpty()) trueSupplier() else falseSupplier()
-    }
-
 
     override fun forEach(operation: (T) -> Unit) {
         for (item: T in this) {
@@ -285,14 +190,4 @@ interface Value<T : Any> : Iterable<T>, Foldable<T>, Monad<T> {
     override fun filter(predicate: (T) -> Boolean): Value<T>
     override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Value<U>
     override fun <U : Any> map(mapper: (T) -> U): Value<U>
-
-    // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U : Any> foldLeft(zero: U, combiner: (U, T) -> U): U {
-        return if (isEmpty()) zero else combiner(zero, get())
-    }
-
-    // DEV-NOTE: default implementations for singleton types, needs to be overridden by multi valued types
-    override fun <U : Any> foldRight(zero: U, combiner: (T, U) -> U): U {
-        return if (isEmpty()) zero else combiner(get(), zero)
-    }
 }

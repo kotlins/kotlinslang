@@ -2,6 +2,7 @@ package kotlinslang
 
 import kotlinslang.control.failure
 import kotlinslang.control.optionOf
+import kotlinslang.control.orElseGet
 import kotlinslang.control.some
 import kotlinslang.control.success
 import org.assertj.core.api.Assertions.assertThat
@@ -33,19 +34,15 @@ class ValueTest {
         val element = 42
         val some = optionOf(element)
         assertThat(some.toOption()).isEqualTo(some)
-        assertThat(some.getOption()).isEqualTo(some)
 
         val success = success(element)
         assertThat(success.toOption()).isEqualTo(some)
-        assertThat(success.getOption()).isEqualTo(some)
 
         val none = optionOf(null)
         assertThat(none.toOption()).isEqualTo(none)
-        assertThat(none.getOption()).isEqualTo(none)
 
         val failure = failure<Int>(NoSuchElementException("No Element"))
         assertThat(failure.toOption()).isEqualTo(none)
-        assertThat(failure.getOption()).isEqualTo(none)
     }
 
     @Test

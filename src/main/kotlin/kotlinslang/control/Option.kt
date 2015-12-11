@@ -1,8 +1,10 @@
 package kotlinslang.control
 
 import kotlinslang.Value
-import kotlinslang.emptyIterator
-import kotlinslang.iteratorOf
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
+import kotlinslang.collection.prependTo
+import kotlinslang.toOption
 
 
 /**
@@ -20,7 +22,7 @@ import kotlinslang.iteratorOf
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Option<T : Any> : Value<T> {
+interface Option<out T : Any> : Value<T> {
     /**
      * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
      *
@@ -41,35 +43,6 @@ interface Option<T : Any> : Value<T> {
 
 
     override fun get(): T
-
-    override fun getOption(): Option<T> {
-        return this
-    }
-
-    /**
-     * Returns the value if this is a {@code Some} or the {@code other} value if this is a {@code None}.
-     * <p>
-     * Please note, that the other value is eagerly evaluated.
-     *
-     * @param other An alternative value
-     * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
-     */
-    override fun orElse(other: T): T {
-        return super.orElse(other)
-    }
-
-    /**
-     * Returns the value if this is a {@code Some}, otherwise the {@code other} value is returned,
-     * if this is a {@code None}.
-     * <p>
-     * Please note, that the other value is lazily evaluated.
-     *
-     * @param supplier An alternative value supplier
-     * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
-     */
-    override fun orElseGet(supplier: () -> T): T {
-        return super.orElseGet(supplier)
-    }
 
     /**
      * Returns the value if this is a {@code Some}, otherwise throws an exception.
@@ -92,7 +65,7 @@ interface Option<T : Any> : Value<T> {
      * @return {@code Some(value)} or {@code None} as specified
      */
     override fun filter(predicate: (T) -> Boolean): Option<T> {
-        return if ((isEmpty() || predicate(get()))) this else None.instance()
+        return if ((isEmpty() || predicate(get()))) this else None
     }
 
     /**
@@ -104,7 +77,7 @@ interface Option<T : Any> : Value<T> {
      */
     override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Option<U> {
         if (isEmpty()) {
-            return None.instance()
+            return None
         } else {
             val iterable = mapper(get())
             if (iterable is Value) {
@@ -114,7 +87,7 @@ interface Option<T : Any> : Value<T> {
                 if (iterator.hasNext()) {
                     return Some(iterator.next())
                 } else {
-                    return None.instance()
+                    return None
                 }
             }
         }
@@ -129,10 +102,15 @@ interface Option<T : Any> : Value<T> {
      */
     override fun <U : Any> map(mapper: (T) -> U): Option<U> {
         if (isEmpty()) {
-            return None.instance()
+            return None
         } else {
             return Some(mapper(get()))
         }
+    }
+
+
+    public fun<P1 : Any, R : Any> map(p1: Option<P1>, f: (T, P1) -> R): Option<R> {
+        return flatMap { t -> p1.map { pp1 -> f(t, pp1) } }
     }
 
     /**
@@ -158,4 +136,127 @@ interface Option<T : Any> : Value<T> {
 
     override fun toString(): String
 
+}
+
+
+public fun<T : Any> Array<out T>.firstOption(): Option<T> {
+    return firstOrNull().toOption()
+}
+
+public fun BooleanArray.firstOption(): Option<Boolean> {
+    return firstOrNull().toOption()
+}
+
+public fun ByteArray.firstOption(): Option<Byte> {
+    return firstOrNull().toOption()
+}
+
+public fun CharArray.firstOption(): Option<Char> {
+    return firstOrNull().toOption()
+}
+
+public fun DoubleArray.firstOption(): Option<Double> {
+    return firstOrNull().toOption()
+}
+
+public fun FloatArray.firstOption(): Option<Float> {
+    return firstOrNull().toOption()
+}
+
+
+public fun IntArray.firstOption(): Option<Int> {
+    return firstOrNull().toOption()
+}
+
+
+public fun LongArray.firstOption(): Option<Long> {
+    return firstOrNull().toOption()
+}
+
+
+public fun ShortArray.firstOption(): Option<Short> {
+    return firstOrNull().toOption()
+}
+
+public fun<T : Any> Iterable<T>.firstOption(): Option<T> {
+    return firstOrNull().toOption()
+}
+
+public fun<T : Any> List<T>.firstOption(): Option<T> {
+    return firstOrNull().toOption()
+}
+
+public fun<T : Any> Sequence<T>.firstOption(): Option<T> {
+    return firstOrNull().toOption()
+}
+
+
+public fun String.firstOption(): Option<Char> {
+    return firstOrNull().toOption()
+}
+
+public inline fun <T : Any> Array<out T>.firstOption(predicate: (T) -> Boolean): Option<T> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun BooleanArray.firstOption(predicate: (Boolean) -> Boolean): Option<Boolean> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun ByteArray.firstOption(predicate: (Byte) -> Boolean): Option<Byte> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun CharArray.firstOption(predicate: (Char) -> Boolean): Option<Char> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun DoubleArray.firstOption(predicate: (Double) -> Boolean): Option<Double> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun FloatArray.firstOption(predicate: (Float) -> Boolean): Option<Float> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun IntArray.firstOption(predicate: (Int) -> Boolean): Option<Int> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun LongArray.firstOption(predicate: (Long) -> Boolean): Option<Long> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun ShortArray.firstOption(predicate: (Short) -> Boolean): Option<Short> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun <T : Any> Iterable<T>.firstOption(predicate: (T) -> Boolean): Option<T> {
+    return firstOrNull(predicate).toOption()
+}
+
+public inline fun <T : Any> Sequence<T>.firstOption(predicate: (T) -> Boolean): Option<T> {
+    return firstOrNull(predicate).toOption()
+}
+
+
+public inline fun String.firstOption(predicate: (Char) -> Boolean): Option<Char> {
+    return firstOrNull(predicate).toOption()
+}
+
+
+public fun<T : Any, R : Any> List<T>.traverse(f: (T) -> Option<R>): Option<List<R>> {
+    return foldRight(Some(emptyList())) { i: T, accumulator: Option<List<R>> ->
+        f(i).map(accumulator) { head: R, tail: List<R> ->
+            head prependTo tail
+        }
+    }
+}
+
+public fun<T : Any> List<Option<T>>.sequential(): Option<List<T>> {
+    return traverse { it }
+}
+
+public fun<T : Any> List<Option<T>>.flatten(): List<T> {
+    return filter { it.isDefined() }.map { it.get() }
 }

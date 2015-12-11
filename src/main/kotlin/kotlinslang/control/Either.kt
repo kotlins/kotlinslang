@@ -1,8 +1,8 @@
 package kotlinslang.control
 
 import kotlinslang.Value
-import kotlinslang.emptyIterator
-import kotlinslang.iteratorOf
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
 import java.util.NoSuchElementException
 import java.util.Objects
 
@@ -33,7 +33,7 @@ import java.util.Objects
  * @author Daniel Dietrich
  * @since 1.0.0
  */
-interface Either<L : Any, R : Any> {
+interface Either<out L : Any, out R : Any> {
 
     /**
      * Returns a LeftProjection of this Either.
@@ -106,18 +106,18 @@ interface Either<L : Any, R : Any> {
      * @param <R> The type of the Right value of an Either.
      * @since 1.0.0
      */
-    class LeftProjection<L : Any, R : Any> constructor(val either: Either<L, R>) : Value<L> {
+    class LeftProjection<out L : Any, out R : Any> constructor(val either: Either<L, R>) : Value<L> {
 
         override fun isEmpty(): Boolean {
             return either.isRight()
         }
 
 
-        private fun asLeft(): L {
+        fun asLeft(): L {
             return (either as Left<L, R>).get()
         }
 
-        private fun asRight(): R {
+        fun asRight(): R {
             return (either as Right<L, R>).get()
         }
 
@@ -135,32 +135,6 @@ interface Either<L : Any, R : Any> {
             }
         }
 
-        /**
-         * Gets the Left value or an alternate value, if the projected Either is a Right.
-         *
-         * @param other an alternative value
-         * @return the left value, if the underlying Either is a Left or else {@code other}
-         * @throws NoSuchElementException if the underlying either of this LeftProjection is a Right
-         */
-        override fun orElse(other: L): L {
-            return if (either.isLeft()) asLeft() else other
-        }
-
-        /**
-         * Gets the Left value or an alternate value, if the projected Either is a Right.
-         *
-         * @param other a function which converts a Right value to an alternative Left value
-         * @return the left value, if the underlying Either is a Left or else the alternative Left value provided by
-         * {@code other} by applying the Right value.
-         */
-        fun orElseGet(other: (R) -> L): L {
-            Objects.requireNonNull(other, "other is null")
-            if (either.isLeft()) {
-                return asLeft()
-            } else {
-                return other(asRight())
-            }
-        }
 
         /**
          * Runs an action in the case this is a projection on a Right value.
@@ -203,9 +177,9 @@ interface Either<L : Any, R : Any> {
             Objects.requireNonNull(predicate, "predicate is null")
             if (either.isLeft()) {
                 val value = asLeft()
-                return if (predicate(value)) Some(value) else None.instance()
+                return if (predicate(value)) Some(value) else None
             } else {
-                return None.instance()
+                return None
             }
         }
 
@@ -282,18 +256,18 @@ interface Either<L : Any, R : Any> {
         }
     }
 
-    class RightProjection<L : Any, R : Any> constructor(val either: Either<L, R>) : Value<R> {
+    class RightProjection<out L : Any, out R : Any> constructor(val either: Either<L, R>) : Value<R> {
 
         override fun isEmpty(): Boolean {
             return either.isLeft()
         }
 
 
-        private fun asLeft(): L {
+        fun asLeft(): L {
             return (either as Left<L, R>).get()
         }
 
-        private fun asRight(): R {
+        fun asRight(): R {
             return (either as Right<L, R>).get()
         }
 
@@ -311,31 +285,6 @@ interface Either<L : Any, R : Any> {
             }
         }
 
-        /**
-         * Gets the Right value or an alternate value, if the projected Either is a Left.
-         *
-         * @param other an alternative value
-         * @return the right value, if the underlying Either is a Right or else {@code other}
-         * @throws NoSuchElementException if the underlying either of this RightProjection is a Left
-         */
-        override fun orElse(other: R): R {
-            return if (either.isRight()) asRight() else other
-        }
-
-        /**
-         * Gets the Right value or an alternate value, if the projected Either is a Left.
-         *
-         * @param other a function which converts a Left value to an alternative Right value
-         * @return the right value, if the underlying Either is a Right or else the alternative Right value provided by
-         * {@code other} by applying the Left value.
-         */
-        fun orElseGet(other: (L) -> R): R {
-            if (either.isRight()) {
-                return asRight()
-            } else {
-                return other(asLeft())
-            }
-        }
 
         /**
          * Runs an action in the case this is a projection on a Left value.
@@ -386,9 +335,9 @@ interface Either<L : Any, R : Any> {
         override fun filter(predicate: (R) -> Boolean): Option<R> {
             if (either.isRight()) {
                 val value = asRight()
-                return if (predicate(value)) Some(value) else None.instance()
+                return if (predicate(value)) Some(value) else None
             } else {
-                return None.instance()
+                return None
             }
         }
 
@@ -468,3 +417,59 @@ interface Either<L : Any, R : Any> {
     }
 
 }
+
+
+/**
+ * Gets the Left value or an alternate value, if the projected Either is a Right.
+ *
+ * @param other an alternative value
+ * @return the left value, if the underlying Either is a Left or else {@code other}
+ * @throws NoSuchElementException if the underlying either of this LeftProjection is a Right
+ */
+fun <L : Any, R : Any> Either.LeftProjection<L, R>.orElse(other: L): L {
+    return if (either.isLeft()) asLeft() else other
+}
+
+/**
+ * Gets the Left value or an alternate value, if the projected Either is a Right.
+ *
+ * @param other a function which converts a Right value to an alternative Left value
+ * @return the left value, if the underlying Either is a Left or else the alternative Left value provided by
+ * {@code other} by applying the Right value.
+ */
+fun<L : Any, R : Any> Either.LeftProjection<L, R>.orElseGet(other: (R) -> L): L {
+    Objects.requireNonNull(other, "other is null")
+    if (either.isLeft()) {
+        return asLeft()
+    } else {
+        return other(asRight())
+    }
+}
+
+
+/**
+ * Gets the Right value or an alternate value, if the projected Either is a Left.
+ *
+ * @param other an alternative value
+ * @return the right value, if the underlying Either is a Right or else {@code other}
+ * @throws NoSuchElementException if the underlying either of this RightProjection is a Left
+ */
+fun <L : Any, R : Any> Either.RightProjection<L, R>.orElse(other: R): R {
+    return if (either.isRight()) asRight() else other
+}
+
+/**
+ * Gets the Right value or an alternate value, if the projected Either is a Left.
+ *
+ * @param other a function which converts a Left value to an alternative Right value
+ * @return the right value, if the underlying Either is a Right or else the alternative Right value provided by
+ * {@code other} by applying the Left value.
+ */
+fun <L : Any, R : Any> Either.RightProjection<L, R>.orElseGet(other: (L) -> R): R {
+    if (either.isRight()) {
+        return asRight()
+    } else {
+        return other(asLeft())
+    }
+}
+
