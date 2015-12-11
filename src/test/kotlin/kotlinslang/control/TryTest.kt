@@ -1,5 +1,7 @@
 package kotlinslang.control
 
+import kotlinslang.orElse
+import kotlinslang.orElseGet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.NoSuchElementException

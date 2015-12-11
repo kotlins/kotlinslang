@@ -17,7 +17,7 @@ package kotlinslang.algebra
  * @since 1.0.0
  */
 
-interface Functor<T : Any> {
+interface Functor<out T : Any> {
     /**
      * Applies a function f to the components of this Functor.
      *

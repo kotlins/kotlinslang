@@ -1,5 +1,11 @@
 package kotlinslang
 
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
+import kotlinslang.function.andThen
+import kotlinslang.function.compose
+import kotlinslang.function.forwardCompose
+import kotlinslang.function.identity
 import  org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.NoSuchElementException

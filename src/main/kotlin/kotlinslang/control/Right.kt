@@ -11,7 +11,7 @@ import java.io.Serializable
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-public final class Right<L : Any, R : Any>(val value: R) : Either<L, R>, Serializable {
+public final class Right<out L : Any, out R : Any>(val value: R) : Either<L, R>, Serializable {
 
     override fun isLeft(): Boolean {
         return false
@@ -45,7 +45,7 @@ public final class Right<L : Any, R : Any>(val value: R) : Either<L, R>, Seriali
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other != null && other is Right<*,*> && value == other.value) return true
+        if (other != null && other is Right<*, *> && value == other.value) return true
         return false
     }
 

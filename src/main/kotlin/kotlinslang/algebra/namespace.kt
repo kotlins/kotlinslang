@@ -1,7 +1,7 @@
 package kotlinslang.algebra
 
-import kotlinslang.compose
-import kotlinslang.identity
+import kotlinslang.function.compose
+import kotlinslang.function.identity
 
 
 /**

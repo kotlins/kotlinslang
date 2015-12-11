@@ -2,6 +2,11 @@ package kotlinslang.algebra
 
 
 import kotlinslang.control.optionOf
+import kotlinslang.foldLeft
+import kotlinslang.foldLeftMap
+import kotlinslang.foldMap
+import kotlinslang.foldRight
+import kotlinslang.foldRightMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -53,12 +58,10 @@ class AlgebraTest {
 
         val foldable = optionOf(value)
         assertThat(foldable.foldLeft(monoid)).isEqualTo(expected)
-        assertThat(foldable.fold(monoid)).isEqualTo(expected)
         assertThat(foldable.fold(zero, combiner)).isEqualTo(expected)
 
         val emptyFoldable = optionOf<String>(null)
         assertThat(emptyFoldable.foldLeft(monoid)).isEqualTo(zero)
-        assertThat(emptyFoldable.fold(monoid)).isEqualTo(zero)
         assertThat(emptyFoldable.fold(zero, combiner)).isEqualTo(zero)
     }
 

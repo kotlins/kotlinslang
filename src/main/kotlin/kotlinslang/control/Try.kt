@@ -1,8 +1,9 @@
 package kotlinslang.control
 
 import kotlinslang.Value
-import kotlinslang.emptyIterator
-import kotlinslang.iteratorOf
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
+import kotlinslang.toTry
 import java.util.NoSuchElementException
 
 
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Try<T : Any> : Value<T> {
+interface Try<out T : Any> : Value<T> {
 
     /**
      * Gets the result of this Try if this is a Success or throws if this is a Failure.
@@ -255,14 +256,6 @@ interface Try<T : Any> : Value<T> {
         }
     }
 
-    fun orElseGet(other: (Throwable) -> T): T {
-        if (isFailure()) {
-            return other(getCause())
-        } else {
-            return get()
-        }
-    }
-
     fun orElseRun(action: (Throwable) -> Unit) {
         if (isFailure()) {
             action(getCause())
@@ -288,49 +281,6 @@ interface Try<T : Any> : Value<T> {
         return onSuccess(action)
     }
 
-    /**
-     * Returns {@code this}, if this is a {@code Success}, otherwise tries to recover the exception of the failure with {@code f},
-     * i.e. calling {@code Try.of(() -> f.apply(throwable))}.
-     *
-     * @param f A recovery function taking a Throwable
-     * @return a new Try
-     */
-    fun recover(f: (Throwable) -> T): Try<T> {
-        if (isFailure()) {
-            return tryOf { f(getCause()) }
-        } else {
-            return this
-        }
-    }
-
-    /**
-     * Returns {@code this}, if this is a Success, otherwise tries to recover the exception of the failure with {@code f},
-     * i.e. calling {@code f.apply(cause.getCause())}. If an error occurs recovering a Failure, then the new Failure is
-     * returned.
-     *
-     * @param f A recovery function taking a Throwable
-     * @return a new Try
-     */
-    fun recoverWith(f: (Throwable) -> Try<T>): Try<T> {
-        if (isFailure()) {
-            return try {
-                f(getCause())
-            } catch (t: Throwable) {
-                Failure(t)
-            }
-
-        } else {
-            return this
-        }
-    }
-
-    fun toEither(): Either<Throwable, T> {
-        if (isFailure()) {
-            return Left(getCause())
-        } else {
-            return Right(get())
-        }
-    }
 
     override fun equals(other: Any?): Boolean
 
@@ -338,4 +288,57 @@ interface Try<T : Any> : Value<T> {
 
     override fun toString(): String
 
+}
+
+
+fun <T : Any> Try<T>.orElseGet(other: (Throwable) -> T): T {
+    if (isFailure()) {
+        return other(getCause())
+    } else {
+        return get()
+    }
+}
+
+/**
+ * Returns {@code this}, if this is a {@code Success}, otherwise tries to recover the exception of the failure with {@code f},
+ * i.e. calling {@code Try.of(() -> f.apply(throwable))}.
+ *
+ * @param f A recovery function taking a Throwable
+ * @return a new Try
+ */
+fun <T : Any> Try<T>.recover(f: (Throwable) -> T): Try<T> {
+    if (isFailure()) {
+        return tryOf { f(getCause()) }
+    } else {
+        return this
+    }
+}
+
+/**
+ * Returns {@code this}, if this is a Success, otherwise tries to recover the exception of the failure with {@code f},
+ * i.e. calling {@code f.apply(cause.getCause())}. If an error occurs recovering a Failure, then the new Failure is
+ * returned.
+ *
+ * @param f A recovery function taking a Throwable
+ * @return a new Try
+ */
+fun <T : Any> Try<T>.recoverWith(f: (Throwable) -> Try<T>): Try<T> {
+    if (isFailure()) {
+        return try {
+            f(getCause())
+        } catch (t: Throwable) {
+            Failure(t)
+        }
+
+    } else {
+        return this
+    }
+}
+
+fun <T : Any> Try<T>.toEither(): Either<Throwable, T> {
+    if (isFailure()) {
+        return Left(getCause())
+    } else {
+        return Right(get())
+    }
 }

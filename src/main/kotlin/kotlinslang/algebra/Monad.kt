@@ -29,7 +29,7 @@ package kotlinslang.algebra
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Monad<T : Any> : Functor<T>, Iterable<T>, Convertible<T> {
+interface Monad<out T : Any> : Functor<T>, Iterable<T> {
 
     /**
      * Filters this `Monad` by testing a predicate.

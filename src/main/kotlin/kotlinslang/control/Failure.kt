@@ -13,7 +13,7 @@ import java.io.Serializable
  * @since 1.0.0
  */
 
-public final class Failure<T : Any>(private val throwable: Throwable) : Try<T>, Serializable {
+public final class Failure<out T : Any>(private val throwable: Throwable) : Try<T>, Serializable {
 
     override fun get(): T {
         throw throwable

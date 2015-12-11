@@ -1,8 +1,9 @@
 package kotlinslang.control
 
 import kotlinslang.Value
-import kotlinslang.emptyIterator
-import kotlinslang.iteratorOf
+import kotlinslang.collection.emptyIterator
+import kotlinslang.collection.iteratorOf
+import kotlinslang.toOption
 
 
 /**
@@ -20,7 +21,7 @@ import kotlinslang.iteratorOf
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-interface Option<T : Any> : Value<T> {
+interface Option<out T : Any> : Value<T> {
     /**
      * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
      *
@@ -41,35 +42,6 @@ interface Option<T : Any> : Value<T> {
 
 
     override fun get(): T
-
-    override fun getOption(): Option<T> {
-        return this
-    }
-
-    /**
-     * Returns the value if this is a {@code Some} or the {@code other} value if this is a {@code None}.
-     * <p>
-     * Please note, that the other value is eagerly evaluated.
-     *
-     * @param other An alternative value
-     * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
-     */
-    override fun orElse(other: T): T {
-        return super.orElse(other)
-    }
-
-    /**
-     * Returns the value if this is a {@code Some}, otherwise the {@code other} value is returned,
-     * if this is a {@code None}.
-     * <p>
-     * Please note, that the other value is lazily evaluated.
-     *
-     * @param supplier An alternative value supplier
-     * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
-     */
-    override fun orElseGet(supplier: () -> T): T {
-        return super.orElseGet(supplier)
-    }
 
     /**
      * Returns the value if this is a {@code Some}, otherwise throws an exception.
@@ -92,7 +64,7 @@ interface Option<T : Any> : Value<T> {
      * @return {@code Some(value)} or {@code None} as specified
      */
     override fun filter(predicate: (T) -> Boolean): Option<T> {
-        return if ((isEmpty() || predicate(get()))) this else None.instance()
+        return if ((isEmpty() || predicate(get()))) this else None
     }
 
     /**
@@ -104,7 +76,7 @@ interface Option<T : Any> : Value<T> {
      */
     override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Option<U> {
         if (isEmpty()) {
-            return None.instance()
+            return None
         } else {
             val iterable = mapper(get())
             if (iterable is Value) {
@@ -114,7 +86,7 @@ interface Option<T : Any> : Value<T> {
                 if (iterator.hasNext()) {
                     return Some(iterator.next())
                 } else {
-                    return None.instance()
+                    return None
                 }
             }
         }
@@ -129,7 +101,7 @@ interface Option<T : Any> : Value<T> {
      */
     override fun <U : Any> map(mapper: (T) -> U): Option<U> {
         if (isEmpty()) {
-            return None.instance()
+            return None
         } else {
             return Some(mapper(get()))
         }

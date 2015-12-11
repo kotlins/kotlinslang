@@ -13,33 +13,9 @@ import java.util.NoSuchElementException
  * @since 1.0.0
  */
 
-public final class None<T : Any> private constructor() : Option<T>, Serializable {
-    companion object {
-        /**
-         * The singleton instance of None.
-         */
-        private val INSTANCE: None<Nothing> = None()
+public object None : Option<Nothing>, Serializable {
 
-        /**
-         * Returns the singleton instance of None as {@code None<T>} in the context of a type {@code <T>}, e.g.
-         * <pre>
-         * <code>final Option&lt;Integer&gt; o = None.instance(); // o is of type None&lt;Integer&gt;</code>
-         * </pre>
-         *
-         * @param <T> The type of the optional value.
-         * @return None
-         */
-        public fun <T : Any> instance(): None<T> {
-            @Suppress("CAST_NEVER_SUCCEEDS")
-            return INSTANCE as None<T>;
-        }
-
-        public fun readResolve(): Any? {
-            return INSTANCE.readResolve()
-        }
-    }
-
-    override fun get(): T {
+    override fun get(): Nothing {
         throw NoSuchElementException("No value present")
     }
 
@@ -59,13 +35,4 @@ public final class None<T : Any> private constructor() : Option<T>, Serializable
         return "None"
     }
 
-    /**
-     * Instance control for object serialization.
-     *
-     * @return The singleton instance of None.
-     * @see java.io.Serializable
-     */
-    private fun readResolve(): Any? {
-        return INSTANCE
-    }
 }

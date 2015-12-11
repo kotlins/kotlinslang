@@ -1,88 +1,206 @@
 package kotlinslang
 
-import kotlin.support.AbstractIterator
+import kotlinslang.algebra.Monoid
+import kotlinslang.control.None
+import kotlinslang.control.Option
+import kotlinslang.control.Some
+import kotlinslang.control.Try
+import kotlinslang.control.tryOf
 
 
 /**
- * Returns a composed function that first applies the {@code before}
- * function to its input, and then applies this function to the result.
- * If evaluation of either function throws an exception, it is relayed to
- * the caller of the composed function.
+ * [TODO: Documentation]
  *
- * @param <V> the type of input to the {@code before} function, and to the
- *           composed function
- * @param before the function to apply before this function is applied
- * @return a composed function that first applies the {@code before}
- * function and then applies this function
- * @throws NullPointerException if before is null
- *
- * @see #andThen(Function)
+ * @author Deny Prasetyo.
  */
-infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
-    return { v: V -> this(before(v)) }
-}
-
-/**
- * Returns a composed function that first applies this function to
- * its input, and then applies the {@code after} function to the result.
- * If evaluation of either function throws an exception, it is relayed to
- * the caller of the composed function.
- *
- * @param <V> the type of output of the {@code after} function, and of the
- *           composed function
- * @param after the function to apply after this function is applied
- * @return a composed function that first applies this function and then
- * applies the {@code after} function
- * @throws NullPointerException if after is null
- *
- * @see #compose(Function)
- */
-infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -> V = andThen(after)
-
-/**
- * Returns a composed function that first applies this function to
- * its input, and then applies the {@code after} function to the result.
- * If evaluation of either function throws an exception, it is relayed to
- * the caller of the composed function.
- *
- * @param <V> the type of output of the {@code after} function, and of the
- *           composed function
- * @param after the function to apply after this function is applied
- * @return a composed function that first applies this function and then
- * applies the {@code after} function
- * @throws NullPointerException if after is null
- *
- * @see #forwardCompose(Function)
- */
-infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
-    return { t: T -> after(this(t)) }
-}
-
-/**
- * Returns a function that always returns its input argument.
- *
- * @param <T> the type of the input and output objects to the function
- * @return a function that always returns its input argument
- */
-public fun<T> identity(): (T) -> T {
-    return { t: T -> t }
-}
 
 
-private object EMPTY : AbstractIterator<Nothing>() {
-    override fun computeNext() {
-        done()
+
+fun <T : Any> Value<T>.toOption(): Option<T> {
+    if (this is Option) {
+        return this
+    } else {
+        return if (isEmpty()) None else Some(get())
     }
 }
 
-fun <T> emptyIterator(): Iterator<T> {
-    return EMPTY
+fun <T : Any> Value<T>.toTry(): Try<T> {
+    if (this is Try<T>) {
+        return this
+    } else {
+        return tryOf({ this.get() })
+    }
 }
 
-fun <T> iteratorOf(element: T): Iterator<T> {
-    return listOf(element).iterator()
+
+/**
+ * Returns the underlying value if present, otherwise {@code other}.
+ *
+ * @param other An alternative value.
+ * @return A value of type {@code T}
+ */
+fun<T : Any> Value<T>.orElse(other: T): T {
+    return if (isEmpty()) other else get()
 }
 
-fun <T> iteratorOf(vararg element: T): Iterator<T> {
-    return listOf(*element).iterator()
+/**
+ * Returns the underlying value if present, otherwise {@code other}.
+ *
+ * @param supplier An alternative value supplier.
+ * @return A value of type {@code T}
+ * @throws NullPointerException if supplier is null
+ */
+fun<T : Any> Value<T>.orElseGet(supplier: () -> T): T {
+    return if (isEmpty()) supplier() else get()
+}
+
+fun <U : Any, T : Any> Value<T>.foldLeft(zero: U, combiner: (U, T) -> U): U {
+    return if (isEmpty()) zero else combiner(zero, get())
+}
+
+fun <U : Any, T : Any> Value<T>.foldRight(zero: U, combiner: (T, U) -> U): U {
+    return if (isEmpty()) zero else combiner(get(), zero)
+}
+
+
+/**
+ * A fluent if-expression for this value. If this is defined (i.e. not empty) trueVal is returned,
+ * otherwise falseVal is returned.
+ *
+ * @param trueVal  The result, if this is defined.
+ * @param falseVal The result, if this is not defined.
+ * @return trueVal if this.isDefined(), otherwise falseVal.
+ */
+fun <T : Any> Value<T>.ifDefined(trueVal: T, falseVal: T): T {
+    return if (isDefined()) trueVal else falseVal
+}
+
+/**
+ * A fluent if-expression for this value. If this is defined (i.e. not empty) trueSupplier.get() is returned,
+ * otherwise falseSupplier.get() is returned.
+ *
+ * @param trueSupplier  The result, if this is defined.
+ * @param falseSupplier The result, if this is not defined.
+ * @return trueSupplier.get() if this.isDefined(), otherwise falseSupplier.get().
+ */
+fun <T : Any> Value<T>.ifDefined(trueSupplier: () -> T, falseSupplier: () -> T): T {
+    return if (isDefined()) trueSupplier() else falseSupplier()
+}
+
+/**
+ * A fluent if-expression for this value. If this is empty (i.e. not defined) trueVal is returned,
+ * otherwise falseVal is returned.
+ *
+ * @param trueVal  The result, if this is empty.
+ * @param falseVal The result, if this is not empty.
+ * @return trueVal if this.isEmpty(), otherwise falseVal.
+ */
+fun <T : Any> Value<T>.ifEmpty(trueVal: T, falseVal: T): T {
+    return if (isEmpty()) trueVal else falseVal
+}
+
+/**
+ * A fluent if-expression for this value. If this is empty (i.e. not defined) trueSupplier.get() is returned,
+ * otherwise falseSupplier.get() is returned.
+ *
+ * @param trueSupplier  The result, if this is defined.
+ * @param falseSupplier The result, if this is not defined.
+ * @return trueSupplier.get() if this.isEmpty(), otherwise falseSupplier.get().
+ */
+fun <T : Any> Value<T>.ifEmpty(trueSupplier: () -> T, falseSupplier: () -> T): T {
+    return if (isEmpty()) trueSupplier() else falseSupplier()
+}
+
+
+/**
+ * Folds this elements from the left, starting with {@code monoid.zero()} and successively calling {@code monoid::combine}.
+ *
+ * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
+ * @return a folded value
+ * @throws NullPointerException if {@code monoid} is null
+ */
+fun <T : Any> Value<T>.fold(monoid: Monoid<T>): T {
+    return foldLeft(monoid)
+}
+
+/**
+ * Folds this elements from the left, starting with {@code zero} and successively calling {@code combine}.
+ *
+ * @param zero    A zero element to start with.
+ * @param combiner A function which combines elements.
+ * @return a folded value
+ * @throws NullPointerException if {@code combine} is null
+ */
+fun <T : Any> Value<T>.fold(zero: T, combiner: (T, T) -> T): T {
+    return foldLeft(zero, combiner)
+}
+
+/**
+ * Folds this elements from the left, starting with {@code monoid.zero()} and successively calling {@code monoid::combine}.
+ *
+ * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
+ * @return a folded value
+ * @throws NullPointerException if {@code monoid} is null
+ */
+fun <T : Any> Value<T>.foldLeft(monoid: Monoid<T>): T {
+    return foldLeft(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })
+}
+
+/**
+ * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
+ * <pre><code>
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ * </code></pre>
+ *
+ * @param monoid A Monoid
+ * @param mapper A mapper
+ * @param <U : Any>    Component type of the given monoid.
+ * @return the folded monoid value.
+ * @throws NullPointerException if {@code monoid} or {@code mapper} is null
+ */
+fun <U : Any, T : Any> Value<T>.foldMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    return foldLeftMap(monoid, mapper)
+}
+
+/**
+ * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
+ * <pre><code>
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ * </code></pre>
+ *
+ * @param monoid A Monoid
+ * @param mapper A mapper
+ * @param <U : Any>    Component type of the given monoid.
+ * @return the folded monoid value.
+ * @throws NullPointerException if {@code monoid} or {@code mapper} is null
+ */
+fun <U : Any, T : Any> Value<T>.foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    return foldLeft(monoid.zero(), { ys, x -> monoid.combine(ys, mapper(x)) })
+}
+
+/**
+ * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
+ * <pre><code>
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ * </code></pre>
+ *
+ * @param monoid A Monoid
+ * @param mapper A mapper
+ * @param <U : Any>    Component type of the given monoid.
+ * @return the folded monoid value.
+ * @throws NullPointerException if {@code monoid} or {@code mapper} is null
+ */
+fun <U : Any, T : Any> Value<T>.foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
+    return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys), x) })
+}
+
+/**
+ * Folds this elements from the right, starting with {@code monoid.zero()} and successively calling {@code monoid::combine}.
+ *
+ * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
+ * @return a folded value
+ * @throws NullPointerException if {@code monoid} is null
+ */
+fun <T : Any> Value<T>.foldRight(monoid: Monoid<T>): T {
+    return foldRight(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })
 }

@@ -1,5 +1,7 @@
 package kotlinslang.control
 
+import kotlinslang.algebra.Monoid
+import kotlinslang.Value
 import java.util.Optional
 
 /**
@@ -22,7 +24,7 @@ public fun<T : Any> T?.toOption(): Option<T> {
     return if (this != null) {
         Some(this)
     } else {
-        None.instance()
+        None
     }
 }
 
@@ -34,7 +36,7 @@ public fun<T : Any> T?.toOption(): Option<T> {
  * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
  */
 fun <T : Any> optionOf(value: T?): Option<T> {
-    return if (value == null) None.instance() else Some(value)
+    return if (value == null) None else Some(value)
 }
 
 /**
@@ -63,7 +65,7 @@ fun <T : Any> some(value: T): Option<T> {
  * @return the single instance of {@code None}
  */
 fun <T : Any> none(): Option<T> {
-    return None.instance()
+    return None
 }
 
 /**
@@ -156,3 +158,4 @@ fun <R : Any> right(right: R): Either<Any, R> {
 fun <L : Any> left(left: L): Either<L, Any> {
     return Left(left)
 }
+
