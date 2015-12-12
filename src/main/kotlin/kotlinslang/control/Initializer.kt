@@ -1,7 +1,5 @@
 package kotlinslang.control
 
-import kotlinslang.algebra.Monoid
-import kotlinslang.Value
 import java.util.Optional
 
 /**
