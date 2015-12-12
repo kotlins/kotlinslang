@@ -15,7 +15,6 @@ import kotlinslang.control.tryOf
  */
 
 
-
 fun <T : Any> Value<T>.toOption(): Option<T> {
     if (this is Option) {
         return this

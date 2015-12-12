@@ -3,7 +3,6 @@ package kotlinslang.control
 import kotlinslang.Value
 import kotlinslang.collection.emptyIterator
 import kotlinslang.collection.iteratorOf
-import kotlinslang.collection.prependTo
 import kotlinslang.toOption
 
 
