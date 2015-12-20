@@ -1,5 +1,6 @@
 package kotlinslang.control
 
+import java.util.NoSuchElementException
 import java.util.Optional
 
 /**
@@ -23,6 +24,34 @@ public fun<T : Any> T?.toOption(): Option<T> {
         Some(this)
     } else {
         None
+    }
+}
+
+/**
+ * Create new Try from a Java Optional
+ *
+ * @param <T>      type of the value
+ * @return {@code Success(optional.get())} if value is Java {@code Optional} is present, {@code Failure(NoSuchElementException)} otherwise
+ */
+fun <T : Any> Optional<T?>.toTry(): Try<T> {
+    return if (this.isPresent) {
+        this.get().toTry()
+    } else {
+        failure(NoSuchElementException("No value present"))
+    }
+}
+
+/**
+ * Creates a new {@code Try} from nullable Value.
+ *
+ * @param <T> type of the nullable value
+ * @return {@code Success(value)} if value is not {@code null}, {@code Failure(NoSuchElementException)} otherwise
+ */
+public fun<T : Any> T?.toTry(): Try<T> {
+    return if (this != null) {
+        success(this)
+    } else {
+        failure(NoSuchElementException("No value present"))
     }
 }
 
@@ -92,6 +121,18 @@ fun <T : Any> tryOf(supplier: () -> T): Try<T> {
     } catch (t: Throwable) {
         Failure(t)
     }
+}
+
+/**
+ * Creates a Try of a Nullable value.
+ *
+ * @param value A nullable value.
+ * @param <T>  Component type
+ * @return {@code Success(value)} if value is not {@code null}, {@code Failure(NoSuchElementException)} otherwise
+ * exception occurs calling {@code supplier.get()}.
+ */
+fun <T : Any> tryOf(value: T?): Try<T> {
+    return value.toTry()
 }
 
 /**
