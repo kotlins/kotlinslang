@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 /**
- * [TODO: Documentation]
+ * Series Test for Algebra Interfaces such as Functor, Monad and Monoid.
  *
  * @author Deny Prasetyo.
  */
