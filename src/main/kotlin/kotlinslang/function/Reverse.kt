@@ -7,6 +7,7 @@ package kotlinslang.function
  * {@code (Int,Double) -> String} will be converted to {@code (Double,Int) -> String}
  *
  * @author Mario Arias, Deny Prasetyo.
+ * @since 1.0.0
  */
 
 

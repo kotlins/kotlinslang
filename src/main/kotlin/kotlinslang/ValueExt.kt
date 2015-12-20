@@ -9,12 +9,16 @@ import kotlinslang.control.tryOf
 
 
 /**
- * [TODO: Documentation]
+ * Extension functions for {@code Value<T>}
  *
  * @author Deny Prasetyo.
+ * @since 1.0.0
  */
 
 
+/**
+ * [Todo Documentation]
+ */
 fun <T : Any> Value<T>.toOption(): Option<T> {
     if (this is Option) {
         return this
@@ -23,6 +27,9 @@ fun <T : Any> Value<T>.toOption(): Option<T> {
     }
 }
 
+/**
+ * [Todo Documentation]
+ */
 fun <T : Any> Value<T>.toTry(): Try<T> {
     if (this is Try<T>) {
         return this
@@ -47,16 +54,23 @@ fun<T : Any> Value<T>.orElse(other: T): T {
  *
  * @param supplier An alternative value supplier.
  * @return A value of type {@code T}
- * @throws NullPointerException if supplier is null
  */
 fun<T : Any> Value<T>.orElseGet(supplier: () -> T): T {
     return if (isEmpty()) supplier() else get()
 }
 
+
+/**
+ * [Todo Documentation]
+ */
 fun <U : Any, T : Any> Value<T>.foldLeft(zero: U, combiner: (U, T) -> U): U {
     return if (isEmpty()) zero else combiner(zero, get())
 }
 
+
+/**
+ * [Todo Documentation]
+ */
 fun <U : Any, T : Any> Value<T>.foldRight(zero: U, combiner: (T, U) -> U): U {
     return if (isEmpty()) zero else combiner(get(), zero)
 }
@@ -75,12 +89,12 @@ fun <T : Any> Value<T>.ifDefined(trueVal: T, falseVal: T): T {
 }
 
 /**
- * A fluent if-expression for this value. If this is defined (i.e. not empty) trueSupplier.get() is returned,
- * otherwise falseSupplier.get() is returned.
+ * A fluent if-expression for this value. If this is defined (i.e. not empty) trueSupplier() is returned,
+ * otherwise falseSupplier() is returned.
  *
  * @param trueSupplier  The result, if this is defined.
  * @param falseSupplier The result, if this is not defined.
- * @return trueSupplier.get() if this.isDefined(), otherwise falseSupplier.get().
+ * @return trueSupplier() if this.isDefined(), otherwise falseSupplier().
  */
 fun <T : Any> Value<T>.ifDefined(trueSupplier: () -> T, falseSupplier: () -> T): T {
     return if (isDefined()) trueSupplier() else falseSupplier()
@@ -99,12 +113,12 @@ fun <T : Any> Value<T>.ifEmpty(trueVal: T, falseVal: T): T {
 }
 
 /**
- * A fluent if-expression for this value. If this is empty (i.e. not defined) trueSupplier.get() is returned,
- * otherwise falseSupplier.get() is returned.
+ * A fluent if-expression for this value. If this is empty (i.e. not defined) trueSupplier() is returned,
+ * otherwise falseSupplier() is returned.
  *
  * @param trueSupplier  The result, if this is defined.
  * @param falseSupplier The result, if this is not defined.
- * @return trueSupplier.get() if this.isEmpty(), otherwise falseSupplier.get().
+ * @return trueSupplier() if this.isEmpty(), otherwise falseSupplier().
  */
 fun <T : Any> Value<T>.ifEmpty(trueSupplier: () -> T, falseSupplier: () -> T): T {
     return if (isEmpty()) trueSupplier() else falseSupplier()
@@ -116,7 +130,6 @@ fun <T : Any> Value<T>.ifEmpty(trueSupplier: () -> T, falseSupplier: () -> T): T
  *
  * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
  * @return a folded value
- * @throws NullPointerException if {@code monoid} is null
  */
 fun <T : Any> Value<T>.fold(monoid: Monoid<T>): T {
     return foldLeft(monoid)
@@ -128,7 +141,6 @@ fun <T : Any> Value<T>.fold(monoid: Monoid<T>): T {
  * @param zero    A zero element to start with.
  * @param combiner A function which combines elements.
  * @return a folded value
- * @throws NullPointerException if {@code combine} is null
  */
 fun <T : Any> Value<T>.fold(zero: T, combiner: (T, T) -> T): T {
     return foldLeft(zero, combiner)
@@ -139,7 +151,6 @@ fun <T : Any> Value<T>.fold(zero: T, combiner: (T, T) -> T): T {
  *
  * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
  * @return a folded value
- * @throws NullPointerException if {@code monoid} is null
  */
 fun <T : Any> Value<T>.foldLeft(monoid: Monoid<T>): T {
     return foldLeft(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })
@@ -148,14 +159,13 @@ fun <T : Any> Value<T>.foldLeft(monoid: Monoid<T>): T {
 /**
  * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
  * <pre><code>
- *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper(x)));
  * </code></pre>
  *
  * @param monoid A Monoid
  * @param mapper A mapper
  * @param <U : Any>    Component type of the given monoid.
  * @return the folded monoid value.
- * @throws NullPointerException if {@code monoid} or {@code mapper} is null
  */
 fun <U : Any, T : Any> Value<T>.foldMap(monoid: Monoid<U>, mapper: (T) -> U): U {
     return foldLeftMap(monoid, mapper)
@@ -164,14 +174,13 @@ fun <U : Any, T : Any> Value<T>.foldMap(monoid: Monoid<U>, mapper: (T) -> U): U 
 /**
  * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
  * <pre><code>
- *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper(x)));
  * </code></pre>
  *
  * @param monoid A Monoid
  * @param mapper A mapper
  * @param <U : Any>    Component type of the given monoid.
  * @return the folded monoid value.
- * @throws NullPointerException if {@code monoid} or {@code mapper} is null
  */
 fun <U : Any, T : Any> Value<T>.foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U): U {
     return foldLeft(monoid.zero(), { ys, x -> monoid.combine(ys, mapper(x)) })
@@ -180,14 +189,13 @@ fun <U : Any, T : Any> Value<T>.foldLeftMap(monoid: Monoid<U>, mapper: (T) -> U)
 /**
  * Maps this elements to a {@code Monoid} and applies {@code foldLeft}, starting with {@code monoid.zero()}:
  * <pre><code>
- *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper.apply(x)));
+ *  foldLeft(monoid.zero(), (ys, x) -&gt; monoid.combine(ys, mapper(x)));
  * </code></pre>
  *
  * @param monoid A Monoid
  * @param mapper A mapper
  * @param <U : Any>    Component type of the given monoid.
  * @return the folded monoid value.
- * @throws NullPointerException if {@code monoid} or {@code mapper} is null
  */
 fun <U : Any, T : Any> Value<T>.foldRightMap(monoid: Monoid<U>, mapper: (T) -> U): U {
     return foldRight(monoid.zero(), { ys, x -> monoid.combine(mapper(ys), x) })
@@ -198,7 +206,6 @@ fun <U : Any, T : Any> Value<T>.foldRightMap(monoid: Monoid<U>, mapper: (T) -> U
  *
  * @param monoid A monoid, providing a {@code zero} and a {@code combine} function.
  * @return a folded value
- * @throws NullPointerException if {@code monoid} is null
  */
 fun <T : Any> Value<T>.foldRight(monoid: Monoid<T>): T {
     return foldRight(monoid.zero(), { t, t2 -> monoid.combine(t, t2) })

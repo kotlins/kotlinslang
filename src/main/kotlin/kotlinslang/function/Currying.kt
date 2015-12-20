@@ -5,6 +5,7 @@ package kotlinslang.function
  * Extension for Convert {@code Function[2 - 7]} to Curried Function and Vice-versa.
  *
  * @author Mario Arias, Deny Prasetyo.
+ * @since 1.0.0
  */
 
 

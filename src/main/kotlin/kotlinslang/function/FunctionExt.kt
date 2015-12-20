@@ -5,6 +5,7 @@ package kotlinslang.function
  * Helpers and Extension Functions that applied to Function1 class.
  *
  * @author Daniel Dietrich, Deny Prasetyo.
+ * @since 1.0.0
  */
 
 
