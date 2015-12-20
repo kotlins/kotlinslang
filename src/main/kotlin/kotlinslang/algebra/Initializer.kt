@@ -8,6 +8,7 @@ import kotlinslang.function.identity
  * Helper function for algebra
  *
  * @author Deny Prasetyo.
+ * @since 1.0.0
  */
 
 /**
@@ -23,14 +24,12 @@ fun <T : Any, R : Any> monadLift(function: (T) -> (R)): (Monad<T>) -> Monad<R> {
 }
 
 /**
- * Factory method for monoids, taking a zero and a Semigroup.
+ * Factory method for monoids, taking a zero and a combiner Function.
  *
- * @param <A>       Value type
- * @param zero      The zero of the Monoid.
- * @param combiner The associative binary operation of the Monoid. Please note that
- *                  {@linkplain javaslang.algebra.Semigroup} is a {@linkplain java.lang.FunctionalInterface}.
+ * @param <A>      Value type
+ * @param zero     The zero of the Monoid.
+ * @param combiner The associative binary operation of the Monoid.
  * @return a new Monoid on type A
- * @throws NullPointerException if {@code semigroup} is null
  */
 fun <A : Any> monoidOf(zero: A, combiner: (A, A) -> A): Monoid<A> {
     return object : Monoid<A> {

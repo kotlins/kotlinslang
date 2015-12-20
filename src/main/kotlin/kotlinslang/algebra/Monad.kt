@@ -19,7 +19,7 @@ package kotlinslang.algebra
  * <ul>
  * <li><strong>Left identity:</strong> {@code unit(a).flatMap(f) ≡ f a}</li>
  * <li><strong>Right identity:</strong> {@code m.flatMap(unit) ≡ m}</li>
- * <li><strong>Associativity:</strong> {@code m.flatMap(f).flatMap(g) ≡ m.flatMap(x -> f.apply(x).flatMap(g))}</li>
+ * <li><strong>Associativity:</strong> {@code m.flatMap(f).flatMap(g) ≡ m.flatMap(x -> f(x).flatMap(g))}</li>
  * </ul>
  *
  * To read further about monads in Java please refer to
@@ -29,26 +29,21 @@ package kotlinslang.algebra
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
+
 interface Monad<out T : Any> : Functor<T>, Iterable<T> {
 
     /**
      * Filters this `Monad` by testing a predicate.
      *
-     *
-     * The semantics may vary from class to class, e.g. for single-valued type (like Option) and multi-values types
-     * (like Traversable). The commonality is, that filtered.isEmpty() will return true, if no element satisfied
+     * If given filtered.isEmpty() will return true, if no element satisfied
      * the given predicate.
      *
      *
      * Also, an implementation may throw `NoSuchElementException`, if no element makes it through the filter
-     * and this state cannot be reflected. E.g. this is the case for [javaslang.control.Either.LeftProjection] and
-     * [javaslang.control.Either.RightProjection].
-
-     * @param predicate A predicate
-     * *
+     * and this state cannot be reflected.
+     *
+     * @param predicate A predicate function
      * @return a new Monad instance
-     * *
-     * @throws NullPointerException if `predicate` is null
      */
     fun filter(predicate: (T) -> Boolean): Monad<T>
 
@@ -80,21 +75,21 @@ interface Monad<out T : Any> : Functor<T>, Iterable<T> {
      * </pre>
      *
      * @param mapper A mapper
-     * @param <U>    Component type of the mapped {@code Monad}
+     * @param <U> Component type of the mapped {@code Monad}
      * @return a mapped {@code Monad}
-     * @throws NullPointerException if {@code mapper} is null
      */
     fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Monad<U>
 
     /**
      * Performs the given [operation] on element.
+     * Only invoked when {@code Monad} is not Empty.
      */
     fun forEach(operation: (T) -> Unit)
 
     /**
      * Checks, if an element exists such that the predicate holds.
      *
-     * @param predicate A Predicate
+     * @param predicate A Predicate function
      * @return true, if predicate holds for one or more elements, false otherwise
      */
     fun any(predicate: (T) -> Boolean): Boolean
@@ -104,7 +99,6 @@ interface Monad<out T : Any> : Functor<T>, Iterable<T> {
      *
      * @param predicate A Predicate
      * @return true, if the predicate holds for all elements, false otherwise
-     * @throws NullPointerException if {@code predicate} is null
      */
     fun all(predicate: (T) -> Boolean): Boolean
 
@@ -112,11 +106,9 @@ interface Monad<out T : Any> : Functor<T>, Iterable<T> {
      * Maps this value to a new value with different component type.
      *
      * @param mapper A mapper
-     * @param <U>    Component type of the mapped {@code Monad}
+     * @param <U> Component type of the mapped {@code Monad}
      * @return a mapped {@code Monad}
-     * @throws NullPointerException if {@code mapper} is null
      */
     override fun <U : Any> map(mapper: (T) -> U): Monad<U>
-
 
 }

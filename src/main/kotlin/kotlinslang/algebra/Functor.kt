@@ -12,20 +12,20 @@ package kotlinslang.algebra
  * where "f, g ∈ Function".
  *
  * @param <T> component type of this functor
- * @author Daniel Dietrich, Deny Prasetyo
+ * @author Daniel Dietrich, Deny Prasetyo.
  * @see <a href="http://www.haskellforall.com/2012/09/the-functor-design-pattern.html">The functor design pattern</a>
  * @since 1.0.0
  */
 
 interface Functor<out T : Any> {
+
     /**
      * Applies a function f to the components of this Functor.
      *
-     * @param <U>    type of the component of the resulting Functor
+     * @param <T> type of the component of this functor
+     * @param <U> type of the component of the resulting Functor
      * @param mapper a Function which maps the component of this Functor
      * @return a new Functor
-     * @throws NullPointerException if {@code f} is null
      */
-
     fun <U : Any> map(mapper: (T) -> (U)): Functor<U>
 }
