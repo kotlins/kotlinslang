@@ -99,11 +99,16 @@ interface Option<out T : Any> : Value<T> {
      * @param <U>    The new value type
      * @return a new {@code Some} containing the mapped value if this Option is defined, otherwise {@code None}, if this is empty.
      */
-    override fun <U : Any> map(mapper: (T) -> U): Option<U> {
+    override fun <U : Any> map(mapper: (T) -> U?): Option<U> {
         if (isEmpty()) {
             return None
         } else {
-            return Some(mapper(get()))
+            val result = mapper(get())
+            if (result != null) {
+                return Some(result)
+            } else {
+                return None
+            }
         }
     }
 

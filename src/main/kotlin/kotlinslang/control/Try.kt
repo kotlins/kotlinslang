@@ -201,7 +201,7 @@ interface Try<out T : Any> : Value<T> {
      * @param mapper A checked function
      * @return a new {@code Try}
      */
-    override fun <U : Any> map(mapper: (T) -> U): Try<U> {
+    override fun <U : Any> map(mapper: (T) -> U?): Try<U> {
         if (isFailure()) {
             @Suppress("UNCHECKED_CAST")
             return this as Failure<U>

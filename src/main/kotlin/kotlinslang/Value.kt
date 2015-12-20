@@ -189,5 +189,5 @@ interface Value<out T : Any> : Iterable<T>, Monad<T> {
 
     override fun filter(predicate: (T) -> Boolean): Value<T>
     override fun <U : Any> flatMap(mapper: (T) -> Iterable<U>): Value<U>
-    override fun <U : Any> map(mapper: (T) -> U): Value<U>
+    override fun <U : Any> map(mapper: (T) -> U?): Value<U>
 }

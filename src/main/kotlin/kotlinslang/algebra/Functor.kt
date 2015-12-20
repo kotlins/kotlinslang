@@ -27,5 +27,5 @@ interface Functor<out T : Any> {
      * @param mapper a Function which maps the component of this Functor
      * @return a new Functor
      */
-    fun <U : Any> map(mapper: (T) -> (U)): Functor<U>
+    fun <U : Any> map(mapper: (T) -> (U?)): Functor<U>
 }

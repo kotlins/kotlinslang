@@ -206,10 +206,16 @@ interface Either<out L : Any, out R : Any> {
          * @param <U>    The new type of a Left value
          * @return A new LeftProjection
          */
-        override fun <U : Any> map(mapper: (L) -> U): LeftProjection<U, R> {
-            if (either.isLeft())
-                return Left<U, R>(mapper(asLeft())).left()
-            else {
+        override fun <U : Any> map(mapper: (L) -> U?): LeftProjection<U, R> {
+            if (either.isLeft()) {
+                val result = mapper(asLeft())
+                if (result != null) {
+                    return Left<U, R>(result).left()
+                } else {
+                    @Suppress("CAST_NEVER_SUCCEEDS")
+                    return this as LeftProjection<U, R>
+                }
+            } else {
                 @Suppress("CAST_NEVER_SUCCEEDS")
                 return this as LeftProjection<U, R>
             }
@@ -365,10 +371,16 @@ interface Either<out L : Any, out R : Any> {
          * @param <U>    The new type of a Right value
          * @return A new RightProjection
          */
-        override fun <U : Any> map(mapper: (R) -> U): RightProjection<L, U> {
-            if (either.isRight())
-                return Right<L, U>(mapper(asRight())).right()
-            else {
+        override fun <U : Any> map(mapper: (R) -> U?): RightProjection<L, U> {
+            if (either.isRight()) {
+                val result = mapper(asRight())
+                if (result != null) {
+                    return Right<L, U>(result).right()
+                } else {
+                    @Suppress("CAST_NEVER_SUCCEEDS")
+                    return this as RightProjection<L, U>
+                }
+            } else {
                 @Suppress("CAST_NEVER_SUCCEEDS")
                 return this as RightProjection<L, U>
             }

@@ -115,9 +115,9 @@ fun <T : Any> optionWhen(condition: Boolean, supplier: () -> T): Option<T> {
  * @return {@code Success(supplier.get())} if no exception occurs, otherwise {@code Failure(throwable)} if an
  * exception occurs calling {@code supplier.get()}.
  */
-fun <T : Any> tryOf(supplier: () -> T): Try<T> {
+fun <T : Any> tryOf(supplier: () -> T?): Try<T> {
     return try {
-        Success(supplier())
+        supplier().toTry()
     } catch (t: Throwable) {
         Failure(t)
     }

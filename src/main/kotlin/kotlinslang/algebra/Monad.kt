@@ -109,6 +109,6 @@ interface Monad<out T : Any> : Functor<T>, Iterable<T> {
      * @param <U> Component type of the mapped {@code Monad}
      * @return a mapped {@code Monad}
      */
-    override fun <U : Any> map(mapper: (T) -> U): Monad<U>
+    override fun <U : Any> map(mapper: (T) -> U?): Monad<U>
 
 }
