@@ -2,9 +2,11 @@ package kotlinslang.function
 
 
 /**
- * [TODO: Documentation]
+ * Extensions for Function[2-7] to reverse Function. The order of parameter will be reversed.
+ * <p>
+ * (Int,Double) -> String will be converted to (Double,Int) -> String
  *
- * @author Deny Prasetyo.
+ * @author Mario Arias, Deny Prasetyo.
  */
 
 

@@ -2,9 +2,9 @@ package kotlinslang.function
 
 
 /**
- * [TODO: Documentation]
+ * Helpers and Extension Functions that applied to Function1 class.
  *
- * @author Deny Prasetyo.
+ * @author Daniel Dietrich, Deny Prasetyo.
  */
 
 
@@ -14,14 +14,13 @@ package kotlinslang.function
  * If evaluation of either function throws an exception, it is relayed to
  * the caller of the composed function.
  *
- * @param <V> the type of input to the {@code before} function, and to the
- *           composed function
+ * @param <V,T> the type of {@code before} function
+ * @param <T,R> the type of Function1, Extended function
  * @param before the function to apply before this function is applied
- * @return a composed function that first applies the {@code before}
+ * @return a composed function with type <V,R> that first applies the {@code before}
  * function and then applies this function
- * @throws NullPointerException if before is null
  *
- * @see #andThen(Function)
+ * @see #andThen(Function1)
  */
 infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
     return { v: V -> this(before(v)) }
@@ -33,14 +32,13 @@ infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
  * If evaluation of either function throws an exception, it is relayed to
  * the caller of the composed function.
  *
- * @param <V> the type of output of the {@code after} function, and of the
- *           composed function
+ * @param <R,V> the type of {@code after} function
+ * @param <T,R> the type of Function1, Extended function
  * @param after the function to apply after this function is applied
- * @return a composed function that first applies this function and then
+ * @return a composed function with type <T,V> that first applies this function and then
  * applies the {@code after} function
- * @throws NullPointerException if after is null
  *
- * @see #compose(Function)
+ * @see #compose(Function1)
  */
 infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -> V = andThen(after)
 
@@ -50,14 +48,14 @@ infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -
  * If evaluation of either function throws an exception, it is relayed to
  * the caller of the composed function.
  *
- * @param <V> the type of output of the {@code after} function, and of the
- *           composed function
+ * @param <R,V> the type of {@code after} function
+ * @param <T,R> the type of Function1, Extended function
  * @param after the function to apply after this function is applied
- * @return a composed function that first applies this function and then
+ * @return a composed function with type <T,V> that first applies this function and then
  * applies the {@code after} function
- * @throws NullPointerException if after is null
  *
- * @see #forwardCompose(Function)
+ * @see #compose(Function1)
+ * @see #forwardCompose(Function1)
  */
 infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
     return { t: T -> after(this(t)) }
