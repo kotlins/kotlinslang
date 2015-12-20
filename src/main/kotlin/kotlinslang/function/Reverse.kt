@@ -2,9 +2,9 @@ package kotlinslang.function
 
 
 /**
- * Extensions for Function[2-7] to reverse Function. The order of parameter will be reversed.
+ * Extensions for {@code Function[2-7]} to reverse Function. The order of parameter will be reversed.
  * <p>
- * (Int,Double) -> String will be converted to (Double,Int) -> String
+ * {@code (Int,Double) -> String} will be converted to {@code (Double,Int) -> String}
  *
  * @author Mario Arias, Deny Prasetyo.
  */

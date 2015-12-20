@@ -15,7 +15,7 @@ package kotlinslang.function
  * the caller of the composed function.
  *
  * @param <V,T> the type of {@code before} function
- * @param <T,R> the type of Function1, Extended function
+ * @param <T,R> the type of this {@code Function1}
  * @param before the function to apply before this function is applied
  * @return a composed function with type <V,R> that first applies the {@code before}
  * function and then applies this function
@@ -33,7 +33,7 @@ infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
  * the caller of the composed function.
  *
  * @param <R,V> the type of {@code after} function
- * @param <T,R> the type of Function1, Extended function
+ * @param <T,R> the type of this {@code Function1}
  * @param after the function to apply after this function is applied
  * @return a composed function with type <T,V> that first applies this function and then
  * applies the {@code after} function
@@ -49,7 +49,7 @@ infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -
  * the caller of the composed function.
  *
  * @param <R,V> the type of {@code after} function
- * @param <T,R> the type of Function1, Extended function
+ * @param <T,R> the type of this {@code Function1}
  * @param after the function to apply after this function is applied
  * @return a composed function with type <T,V> that first applies this function and then
  * applies the {@code after} function
