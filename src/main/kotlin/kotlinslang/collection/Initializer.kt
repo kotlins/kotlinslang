@@ -4,9 +4,10 @@ import kotlin.support.AbstractIterator
 
 
 /**
- * [TODO: Documentation]
+ * Helper Functions to Initialize Collection. Used by Kotlinslang.
  *
  * @author Deny Prasetyo.
+ * @since 1.0.0
  */
 
 

@@ -6,9 +6,10 @@ import kotlinslang.control.toOption
 
 
 /**
- * [TODO: Documentation]
+ * Extensions for Kotlin Collection that related to Kotlinslang Construct.
  *
  * @author Deny Prasetyo.
+ * @since 1.0.0
  */
 
 
@@ -43,7 +44,6 @@ public inline fun <T : Any> Iterable<T>.firstOption(predicate: (T) -> Boolean): 
 public inline fun <T : Any> Sequence<T>.firstOption(predicate: (T) -> Boolean): Option<T> {
     return firstOrNull(predicate).toOption()
 }
-
 
 public fun<T : Any, R : Any> List<T>.traverse(f: (T) -> Option<R>): Option<List<R>> {
     return foldRight(Some(emptyList())) { i: T, accumulator: Option<List<R>> ->
