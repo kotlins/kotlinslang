@@ -1,14 +1,18 @@
 package kotlinslang.algebra
 
 
+import kotlinslang.control.failure
 import kotlinslang.control.optionOf
+import kotlinslang.control.success
 import kotlinslang.foldLeft
 import kotlinslang.foldLeftMap
 import kotlinslang.foldMap
 import kotlinslang.foldRight
 import kotlinslang.foldRightMap
+import kotlinslang.function.identity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import java.util.NoSuchElementException
 
 /**
  * Series Test for Algebra Interfaces such as Functor, Monad and Monoid.
@@ -108,5 +112,21 @@ class AlgebraTest {
         assertThat(foldable.foldRightMap(monoid, { i -> "[$i]" })).isEqualTo(expected)
     }
 
+    @Test
+    fun functorIdentityLaw() {
+        val value = 42
+        val functorSome = optionOf(value)
+        val functorNone = optionOf<String>(null)
+
+        assertThat(functorSome.map(identity())).isEqualTo(functorSome)
+        assertThat(functorNone.map(identity())).isEqualTo(functorNone)
+
+        val functorSuccess = success(value)
+        val functorFailure = failure<String>(NoSuchElementException("Failure Functor"))
+
+        assertThat(functorSuccess.map(identity())).isEqualTo(functorSuccess)
+        assertThat(functorFailure.map(identity())).isEqualTo(functorFailure)
+
+    }
 
 }
