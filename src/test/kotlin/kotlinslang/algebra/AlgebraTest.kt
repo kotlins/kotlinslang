@@ -11,6 +11,7 @@ import kotlinslang.foldRight
 import kotlinslang.foldRightMap
 import kotlinslang.function.identity
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import java.util.NoSuchElementException
 
@@ -126,6 +127,20 @@ class AlgebraTest {
 
         assertThat(functorSuccess.map(identity())).isEqualTo(functorSuccess)
         assertThat(functorFailure.map(identity())).isEqualTo(functorFailure)
+
+    }
+
+    @Test
+    @Ignore
+    fun functorAssociativeLaw() {
+        val value = 42
+        val functorSome = optionOf(value)
+        val functorNone = optionOf<String>(null)
+
+
+        val functorSuccess = success(value)
+        val functorFailure = failure<String>(NoSuchElementException("Failure Functor"))
+
 
     }
 
