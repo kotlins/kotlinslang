@@ -1,5 +1,6 @@
 # Kotlinslang
 A functional library for Kotlin that provides  functional control structures. Inspired by Javaslang and funKTionale.   
+     
 [![Build Status](https://travis-ci.org/kotlinslang/kotlinslang.svg?branch=master)](https://travis-ci.org/kotlinslang/kotlinslang)
 [![codecov.io](https://codecov.io/github/kotlinslang/kotlinslang/coverage.svg?branch=master)](https://codecov.io/github/kotlinslang/kotlinslang?branch=master) 
 
