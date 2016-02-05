@@ -34,7 +34,9 @@ jacocoTestReport {
 check.dependsOn jacocoTestReport
 
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-jdk-annotations:${kotlinGradleVersion}"
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinGradleVersion}"
+    testCompile "org.jetbrains.kotlin:kotlin-test:${kotlinGradleVersion}"
     testCompile("org.assertj:assertj-core:${assertJVersion}")
     testCompile("junit:junit:${junitVersion}")
 }

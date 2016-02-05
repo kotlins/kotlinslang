@@ -11,7 +11,7 @@ import java.io.Serializable
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-public final class Right<out L : Any, out R : Any>(val value: R) : Either<L, R>, Serializable {
+final class Right<out L : Any, out R : Any>(val value: R) : Either<L, R>, Serializable {
 
     override fun isLeft(): Boolean {
         return false

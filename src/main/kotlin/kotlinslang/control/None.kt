@@ -13,7 +13,7 @@ import java.util.NoSuchElementException
  * @since 1.0.0
  */
 
-public object None : Option<Nothing>, Serializable {
+object None : Option<Nothing>, Serializable {
 
     override fun get(): Nothing {
         throw NoSuchElementException("No value present")

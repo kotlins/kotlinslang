@@ -12,7 +12,7 @@ import java.io.Serializable
  * @since 1.0.0
  */
 
-public final class Left<out L : Any, out R : Any>(val value: L) : Either<L, R>, Serializable {
+final class Left<out L : Any, out R : Any>(val value: L) : Either<L, R>, Serializable {
 
 
     override fun isLeft(): Boolean {

@@ -12,7 +12,7 @@ import java.io.Serializable
  * @author Daniel Dietrich, Deny Prasetyo
  * @since 1.0.0
  */
-public final class Some<out T : Any>(val value: T) : Option<T>, Serializable {
+final class Some<out T : Any>(val value: T) : Option<T>, Serializable {
 
     override fun get(): T {
         return value;

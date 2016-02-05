@@ -23,7 +23,7 @@ package kotlinslang.function
  *
  * @see #andThen(Function1)
  */
-infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
+infix fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
     return { v: V -> this(before(v)) }
 }
 
@@ -41,7 +41,7 @@ infix public fun<V, T, R> Function1<T, R>.compose(before: (V) -> T): (V) -> R {
  *
  * @see #compose(Function1)
  */
-infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -> V = andThen(after)
+infix fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -> V = andThen(after)
 
 /**
  * Returns a composed function that first applies this function to
@@ -58,7 +58,7 @@ infix public fun<V, T, R> Function1<T, R>.forwardCompose(after: (R) -> V): (T) -
  * @see #compose(Function1)
  * @see #forwardCompose(Function1)
  */
-infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
+infix fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
     return { t: T -> after(this(t)) }
 }
 
@@ -68,6 +68,6 @@ infix public fun<V, T, R> Function1<T, R>.andThen(after: (R) -> V): (T) -> V {
  * @param <T> the type of the input and output objects to the function
  * @return a function that always returns its input argument
  */
-public fun<T> identity(): (T) -> T {
+fun<T> identity(): (T) -> T {
     return { t: T -> t }
 }

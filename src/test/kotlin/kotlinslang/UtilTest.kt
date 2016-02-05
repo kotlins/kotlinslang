@@ -6,7 +6,7 @@ import kotlinslang.function.andThen
 import kotlinslang.function.compose
 import kotlinslang.function.forwardCompose
 import kotlinslang.function.identity
-import  org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.NoSuchElementException
 import kotlin.test.assertFailsWith
@@ -25,9 +25,9 @@ class UtilTest {
         val emptyIter = emptyIterator<Int>()
         assertThat(emptyIter.hasNext()).isFalse()
         assertFailsWith(
-                exceptionClass = NoSuchElementException::class,
-                block = { emptyIter.next() },
-                message = "Throws Exception when call next() on EmptyIterator"
+            exceptionClass = NoSuchElementException::class,
+            block = { emptyIter.next() },
+            message = "Throws Exception when call next() on EmptyIterator"
         )
     }
 

@@ -1,8 +1,5 @@
 package kotlinslang.collection
 
-import kotlin.support.AbstractIterator
-
-
 /**
  * Helper Functions to Initialize Collection. Used by Kotlinslang.
  *
