@@ -58,6 +58,7 @@ class OptionTest {
 
         assertEquals(none.flatMap { t -> some(t + 1) }, none)
 
+        assertEquals(none.transform { null }, null)
 
     }
 
@@ -101,6 +102,9 @@ class OptionTest {
         assertEquals(some.flatMap { t -> some(t + 1) }, some(element + 1))
         assertEquals(some.flatMap { t -> listOf(t + 1) }, some(element + 1))
         assertEquals(some.flatMap { t -> listOf<Int>() }, none<Int>())
+
+        val transformed = some.transform { listOf(it.get()) }
+        assertThat(transformed).isInstanceOf(List::class.java)
 
     }
 }

@@ -113,7 +113,7 @@ interface Option<out T : Any> : Value<T> {
     }
 
 
-    public fun<P : Any, U : Any> map(p: Option<P>, f: (T, P) -> U): Option<U> {
+    fun<P : Any, U : Any> map(p: Option<P>, f: (T, P) -> U): Option<U> {
         return flatMap { t -> p.map { pp1 -> f(t, pp1) } }
     }
 
@@ -128,6 +128,17 @@ interface Option<out T : Any> : Value<T> {
             action(get())
         }
         return this
+    }
+
+    /**
+     * Transforms this {@code Option}.
+     *
+     * @param function   A transformation
+     * @param <U> Type of transformation result
+     * @return An instance of type {@code U}
+     */
+    fun <U : Any?> transform(function: (Option<T>) -> U): U {
+        return function(this)
     }
 
     override fun iterator(): Iterator<T> {

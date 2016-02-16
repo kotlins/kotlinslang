@@ -19,7 +19,7 @@ fun <T : Any> Optional<T?>.toOption(): Option<T> {
  * @param <T> type of the nullable value
  * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
  */
-public fun<T : Any> T?.toOption(): Option<T> {
+fun<T : Any> T?.toOption(): Option<T> {
     return if (this != null) {
         Some(this)
     } else {
@@ -47,7 +47,7 @@ fun <T : Any> Optional<T?>.toTry(): Try<T> {
  * @param <T> type of the nullable value
  * @return {@code Success(value)} if value is not {@code null}, {@code Failure(NoSuchElementException)} otherwise
  */
-public fun<T : Any> T?.toTry(): Try<T> {
+fun<T : Any> T?.toTry(): Try<T> {
     return if (this != null) {
         success(this)
     } else {
