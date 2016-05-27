@@ -23,7 +23,7 @@ repositories {
 Then you can use Kotlinslang dependency.   
 ```   
 dependencies {
-    compile "org.kotlinslang:kotlinslang:1.0.1-2"
+    compile "org.kotlinslang:kotlinslang:1.0.2"
 }  
 ```   
 
@@ -42,7 +42,7 @@ Then add the dependency
 <dependency>
     <groupId>org.kotlinslang</groupId>
     <artifactId>kotlinslang</artifactId>
-    <version>1.0.1-2</version>
+    <version>1.0.2</version>
 </dependency>   
 ```    
 
