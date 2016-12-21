@@ -6,7 +6,7 @@ A functional library for Kotlin that provides  functional control structures. In
 
 ## Introduction
 Kotlinslang is a functional library for kotlin that provides functional (Monadic) control structures such as `Try<T>`, `Option<T>` and `Either<L,R>` also helpers for functional programming.
-Heavily inspired by [Javaslang](javaslang.com) and [funKTonale](https://github.com/MarioAriasC/funKTionale).
+Heavily inspired by [Javaslang](http://www.javaslang.io/) and [funKTonale](https://github.com/MarioAriasC/funKTionale).
 
 ## Usage
 For now Kotlinslang library available at bintray.com.
